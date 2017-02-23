@@ -30,8 +30,6 @@ public class GeomusicService {
 
     public Observable<LoginResponse> login(String email, String password) {
         Call<LoginResponse> repos = api.getUserJson(email, password);
-        return Observable.<LoginResponse>fromCallable(() -> {
-            return repos.execute().body();
-        });
+        return Observable.fromCallable(() -> repos.execute().body());
     }
 }
