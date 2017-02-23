@@ -59,7 +59,6 @@ public class LoginActivity extends Activity {
         loginButton.setOnClickListener(v -> {
 
             showProgress(true);
-            vkLogin();
             ServiceGenerator.getGeomusicService().login(mEditTextEmail.getText().toString(), mEditTextPassword.getText().toString())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

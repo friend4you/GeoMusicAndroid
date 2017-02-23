@@ -13,14 +13,11 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.example.vlada.geomusicandroidclient.api.model.Record;
+
 import java.io.IOException;
 
 import static android.content.ContentValues.TAG;
-
-/**
- * Created by vlada on 20.02.2017.
- */
-
 
 public class MusicService extends Service {
 
@@ -28,8 +25,8 @@ public class MusicService extends Service {
     final static String PAUSE = "com.example.vladarsenyuk.mediaplayer.action.PAUSE";
 
 
-    public static int mPlayPosition = 0;
-    public static int pausedPosition = -1;
+    public static Record activeRecord;
+    public static Record pausedRecord;
     private int pausedTime = 0;
 
     public static boolean isInBackground;
@@ -121,14 +118,13 @@ public class MusicService extends Service {
     }
 
     public void play() {
-        if (mPlayPosition != pausedPosition) {
+        if (activeRecord.equals(pausedRecord)) {
             mediaPlayer.reset();
             try {
-
-                mediaPlayer.setDataSource(MainActivity.searchRecordAdapter.getItem(mPlayPosition).getPath());
+                mediaPlayer.setDataSource(activeRecord.getPath());
                 mediaPlayer.prepare();
             } catch (IOException e) {
-
+                Log.e(TAG, "play: " + activeRecord.getPath(), e);
             }
             mediaPlayer.start();
         } else {
@@ -141,7 +137,7 @@ public class MusicService extends Service {
     public void pause() {
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-            pausedPosition = mPlayPosition;
+            pausedRecord = activeRecord;
             pausedTime = mediaPlayer.getCurrentPosition();
         }
     }

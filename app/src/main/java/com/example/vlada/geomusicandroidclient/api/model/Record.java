@@ -115,4 +115,21 @@ public class Record {
         this.additionalProperties.put(name, value);
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Record record = (Record) o;
+
+        if (!id.equals(record.id)) return false;
+        return additionalProperties != null ? additionalProperties.equals(record.additionalProperties) : record.additionalProperties == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

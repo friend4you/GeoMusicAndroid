@@ -18,43 +18,35 @@ import android.widget.TextView;
 
 import com.example.vlada.geomusicandroidclient.api.model.Record;
 
-import org.w3c.dom.Text;
-
-import static com.example.vlada.geomusicandroidclient.MainActivity.BROADCAST_ACTION;
 import static com.example.vlada.geomusicandroidclient.MainActivity.BROADCAST_SEEK_CHANGED;
 import static com.example.vlada.geomusicandroidclient.MainActivity.currentRecord;
 import static com.example.vlada.geomusicandroidclient.MainActivity.keepplaying;
 import static com.example.vlada.geomusicandroidclient.MainActivity.playing;
-import static com.example.vlada.geomusicandroidclient.MainActivity.searchRecordAdapter;
 
-/**
- * Created by vlada on 21.02.2017.
- */
-
-public class MediaPlayer extends Activity{
+public class MediaPlayer extends Activity {
 
 
-    TextView artistTitle;
-    TextView duration;
-    TextView currentTime;
-    ImageView playPause;
-    SeekBar timeLine;
-    ImageView recordImage;
+    private TextView artistTitle;
+    private TextView duration;
+    private TextView currentTime;
+    private ImageView playPause;
+    private SeekBar timeLine;
+    private ImageView recordImage;
 
     private int seekMax;
-    NotificationManager notificationManager;
+    private NotificationManager notificationManager;
 
 
     BroadcastReceiver seekbr = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateSeekBar(intent);
-            if(MusicService.isInBackground)
+            if (MusicService.isInBackground)
                 sendNotification();
         }
     };
 
-    private void updateSeekBar(Intent serviceIntent){
+    private void updateSeekBar(Intent serviceIntent) {
         int seekProgress = Integer.parseInt(serviceIntent.getStringExtra("current"));
         seekMax = Integer.parseInt(serviceIntent.getStringExtra("mediamax"));
         timeLine.setMax(seekMax);
@@ -76,15 +68,10 @@ public class MediaPlayer extends Activity{
         playPause = (ImageView) findViewById(R.id.record_play_playPause);
         recordImage = (ImageView) findViewById(R.id.record_play_recordImage);
 
-        playPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PlayPause(v);
-            }
-        });
+        playPause.setOnClickListener(v -> PlayPause(v));
 
-        if(MusicService.mediaPlayer != null){
-            if(MusicService.mediaPlayer.isPlaying()){
+        if (MusicService.mediaPlayer != null) {
+            if (MusicService.mediaPlayer.isPlaying()) {
                 playing = 1;
                 timeLine.setProgress(MusicService.mediaPlayer.getCurrentPosition());
                 timeLine.setMax(MusicService.mediaPlayer.getDuration());
@@ -92,24 +79,22 @@ public class MediaPlayer extends Activity{
         }
 
 
-
-        if(playing == 1){
+        if (playing == 1) {
             playPause.setImageResource(R.drawable.ic_pause_circle_outline_white_48dp);
-        }
-        else{
+        } else {
             playPause.setImageResource(R.drawable.ic_play_circle_outline_white_48dp);
         }
-        String artistTitleText = currentRecord.getArtist()+" - "+currentRecord.getTitle();
-        if(artistTitleText.length() > 35){
+        String artistTitleText = currentRecord.getArtist() + " - " + currentRecord.getTitle();
+        if (artistTitleText.length() > 35) {
             artistTitle.setText(artistTitleText.substring(0, 35) + "...");
-        }else{
+        } else {
             artistTitle.setText(artistTitleText);
         }
 
         timeLine.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser){
+                if (fromUser) {
                     int seekPos = seekBar.getProgress();
                     Intent seekChangedIntent = new Intent(BROADCAST_SEEK_CHANGED);
                     seekChangedIntent.putExtra("seekpos", seekPos);
@@ -131,19 +116,17 @@ public class MediaPlayer extends Activity{
         registerReceiver(seekbr, new IntentFilter(MusicService.BROADCAST_SEEK));
 
 
-
     }
 
 
-
-    public void PlayPause(View view){
+    public void PlayPause(View view) {
         Intent serviceIntent = new Intent(this, MusicService.class);
-        if(keepplaying && playing == 1)
+        if (keepplaying && playing == 1)
             playing = 0;
 
-        Log.d("playing status" , Integer.toString(playing));
-        Log.d("keepplaying status" , Boolean.toString(keepplaying));
-        switch (playing){
+        Log.d("playing status", Integer.toString(playing));
+        Log.d("keepplaying status", Boolean.toString(keepplaying));
+        switch (playing) {
             case 0:
                 playing = 1;
                 playPause.setImageResource(R.drawable.ic_pause_circle_outline_white_48dp);
@@ -171,21 +154,20 @@ public class MediaPlayer extends Activity{
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         MusicService.isInBackground = false;
     }
 
-    public String showSongTitle(int position){
-        Record current = searchRecordAdapter.getItem(position);
-        String song = current.getArtist() + " - " + current.getTitle();
-        if(song.length() > 35){
+    public String getSongTitle(Record record) {
+        String song = record.getArtist() + " - " + record.getTitle();
+        if (song.length() > 35) {
             song = song.substring(0, 35) + "...";
         }
         return song;
     }
 
-    public void sendNotification(){
+    public void sendNotification() {
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -194,7 +176,7 @@ public class MediaPlayer extends Activity{
         NotificationCompat.Builder notification = new NotificationCompat.Builder(this)
                 .setContentIntent(pIntent)
                 .setSmallIcon(R.drawable.ic_play_circle_outline_white_48dp)
-                .setContentTitle(showSongTitle(MusicService.mPlayPosition))
+                .setContentTitle(getSongTitle(MusicService.activeRecord))
                 .setTicker("Your music is playing")
                 .setPriority(Notification.PRIORITY_HIGH)
                 .setAutoCancel(true)

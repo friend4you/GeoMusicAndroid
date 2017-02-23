@@ -10,17 +10,17 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -29,10 +29,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.vlada.geomusicandroidclient.api.model.Record;
@@ -60,9 +58,9 @@ public class MainActivity extends Activity
     final static int PERMISSION_REQUEST_CODE = 555;
     final static String BROADCAST_ACTION = "BROADCAST_ACTION";
     public static final String BROADCAST_SEEK_CHANGED = "SEEK_CHANGED";
-    List<Record> recordList = new ArrayList<Record>();
-    private ListView recordListView;
-    static SearchRecordAdapter searchRecordAdapter = null;
+    private List<Record> recordList = new ArrayList<Record>();
+    private RecyclerView musicRecycler;
+    private SearchRecordAdapter searchRecordAdapter;
     static boolean keepplaying = false;
     static int playing = 0;
 
@@ -74,7 +72,6 @@ public class MainActivity extends Activity
         new Application().onCreate();
 
 
-
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<View>();
 
@@ -84,24 +81,12 @@ public class MainActivity extends Activity
         recordImage.setImageResource(R.drawable.record_background);
         playPause = (ImageView) findViewById(R.id.main_playPause);
         playPause.setImageResource(R.drawable.ic_play_circle_outline_white_48dp);
-        playPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PlayPause(v);
-            }
-        });
+        playPause.setOnClickListener(v -> PlayPause(v));
         recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
-        recordStrip.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, MediaPlayer.class);
-
-                startActivity(intent);
-            }
+        recordStrip.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, MediaPlayer.class);
+            startActivity(intent);
         });
-
-        searchRecordAdapter = new SearchRecordAdapter(this, recordList);
-
 
         View page = inflater.inflate(R.layout.playlists_featured, null);
         pages.add(page);
@@ -149,7 +134,7 @@ public class MainActivity extends Activity
                     PERMISSION_REQUEST_CODE);
         } else {
             getRecords();
-            if(sPref.getString("record_location", "null") == "local") {
+            if (sPref.getString("record_location", "null") == "local") {
                 recordArtistSelected.setText(recordList.get(sPref.getInt("record_id", 0)).getArtist());
                 recordTitleSelected.setText(recordList.get(sPref.getInt("record_id", 0)).getTitle());
                 currentRecord = recordList.get(sPref.getInt("record_id", 0));
@@ -195,127 +180,146 @@ public class MainActivity extends Activity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_playlists) {
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            List<View> pages = new ArrayList<View>();
-
-            View page = inflater.inflate(R.layout.playlists_featured, null);
-            pages.add(page);
-
-            page = inflater.inflate(R.layout.playlists_trending, null);
-            pages.add(page);
-
-            page = inflater.inflate(R.layout.playlists_categories, null);
-            pages.add(page);
-
-            MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setCurrentItem(0);
-
-            navigationView.setCheckedItem(R.id.nav_playlists);
-        } else if (id == R.id.nav_favorites) {
-
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            List<View> pages = new ArrayList<View>();
-
-            View page = inflater.inflate(R.layout.favorites_records, null);
-            pages.add(page);
-
-            MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setCurrentItem(0);
-
-            navigationView.setCheckedItem(R.id.nav_favorites);
-        } else if (id == R.id.nav_subscribed) {
-
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            List<View> pages = new ArrayList<View>();
-
-            View page = inflater.inflate(R.layout.subscribed_playlists, null);
-            pages.add(page);
-
-            MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setCurrentItem(0);
-
-            navigationView.setCheckedItem(R.id.nav_subscribed);
-        } else if (id == R.id.nav_settings) {
-
-            Intent intent = new Intent(MainActivity.this, Settings.class);
-            startActivity(intent);
-
-        } else if (id == R.id.nav_nearyou) {
-
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            List<View> pages = new ArrayList<View>();
-
-            View page = inflater.inflate(R.layout.nearyou_map, null);
-            pages.add(page);
-
-            page = inflater.inflate(R.layout.nearyou_categories, null);
-            pages.add(page);
-
-            MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setCurrentItem(0);
-
-            navigationView.setCheckedItem(R.id.nav_nearyou);
-        } else if (id == R.id.nav_search) {
-
-            LayoutInflater inflater = LayoutInflater.from(this);
-            List<View> pages = new ArrayList<View>();
-
-            View page = inflater.inflate(R.layout.record_search, null);
-            pages.add(page);
-
-            MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-            ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-            viewPager.setAdapter(pagerAdapter);
-            viewPager.setCurrentItem(0);
-
-
-            navigationView.setCheckedItem(R.id.nav_search);
-            recordListView = (ListView) findViewById(R.id.search_record_listview);
-            recordListView.setAdapter(searchRecordAdapter);
-
-            recordListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    showSongTitle(position);
-                    keepplaying = true;
-                    currentRecord = recordList.get(position);
-                    MusicService.mPlayPosition = position;
-                    PlayPause(playPause);
-                }
-            });
-
-
-
-        } else if (id == R.id.nav_logout) {
-            SharedPreferences.Editor ed = sPref.edit();
-            ed.putBoolean("is_authorized", false);
-            ed.putString("email", "");
-            ed.putString("password", "");
-            ed.apply();
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
+        switch (id) {
+            case R.id.nav_playlists:
+                openPlayList();
+                break;
+            case R.id.nav_favorites:
+                openFavourites();
+                break;
+            case R.id.nav_subscribed:
+                openSubscribed();
+                break;
+            case R.id.nav_settings:
+                openSettings();
+                break;
+            case R.id.nav_nearyou:
+                openNearYou();
+                break;
+            case R.id.nav_search:
+                openSearch();
+                break;
+            case R.id.nav_logout:
+                logout();
+                break;
         }
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    public void getRecords(){
+    private void logout() {
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putBoolean("is_authorized", false);
+        ed.putString("email", "");
+        ed.putString("password", "");
+        ed.apply();
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        startActivity(intent);
+    }
+
+    private void openSearch() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
+
+        View page = inflater.inflate(R.layout.record_search, null);
+        pages.add(page);
+
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
+        navigationView.setCheckedItem(R.id.nav_search);
+
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        searchRecordAdapter = new SearchRecordAdapter(recordList, record -> {
+            showSongTitle(record);
+            keepplaying = true;
+            currentRecord = record;
+            MusicService.activeRecord = record;
+            PlayPause(playPause);
+        });
+        musicRecycler = (RecyclerView) findViewById(R.id.music_recycler);
+        musicRecycler.setLayoutManager(manager);
+        musicRecycler.setAdapter(searchRecordAdapter);
+    }
+
+    private void openNearYou() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
+
+        View page = inflater.inflate(R.layout.nearyou_map, null);
+        pages.add(page);
+
+        page = inflater.inflate(R.layout.nearyou_categories, null);
+        pages.add(page);
+
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
+
+        navigationView.setCheckedItem(R.id.nav_nearyou);
+    }
+
+    private void openSettings() {
+        Intent intent = new Intent(MainActivity.this, Settings.class);
+        startActivity(intent);
+    }
+
+    private void openSubscribed() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
+
+        View page = inflater.inflate(R.layout.subscribed_playlists, null);
+        pages.add(page);
+
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
+
+        navigationView.setCheckedItem(R.id.nav_subscribed);
+    }
+
+    private void openFavourites() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
+
+        View page = inflater.inflate(R.layout.favorites_records, null);
+        pages.add(page);
+
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
+
+        navigationView.setCheckedItem(R.id.nav_favorites);
+    }
+
+    private void openPlayList() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        List<View> pages = new ArrayList<View>();
+
+        View page = inflater.inflate(R.layout.playlists_featured, null);
+        pages.add(page);
+
+        page = inflater.inflate(R.layout.playlists_trending, null);
+        pages.add(page);
+
+        page = inflater.inflate(R.layout.playlists_categories, null);
+        pages.add(page);
+
+        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(0);
+
+        navigationView.setCheckedItem(R.id.nav_playlists);
+    }
+
+    public void getRecords() {
         recordList.clear();
         String[] columns = {MediaStore.Audio.AudioColumns._ID, MediaStore.Audio.AudioColumns.ARTIST, MediaStore.Audio.AudioColumns.TITLE, MediaStore.Audio.AudioColumns.DATA};
         String where = MediaStore.Audio.AudioColumns.IS_MUSIC + " <> 0";
@@ -327,18 +331,18 @@ public class MainActivity extends Activity
         }
         searchRecordAdapter.notifyDataSetChanged();
 
-        if(searchRecordAdapter.getCount() != 0)
-            showSongTitle(MusicService.mPlayPosition);
+        if (searchRecordAdapter.getItemCount() != 0)
+            showSongTitle(MusicService.activeRecord);
     }
 
-    public void PlayPause(View view){
+    public void PlayPause(View view) {
         Intent serviceIntent = new Intent(this, MusicService.class);
-        if(keepplaying && playing == 1)
+        if (keepplaying && playing == 1)
             playing = 0;
 
-        Log.d("playing status" , Integer.toString(playing));
-        Log.d("keepplaying status" , Boolean.toString(keepplaying));
-        switch (playing){
+        Log.d("playing status", Integer.toString(playing));
+        Log.d("keepplaying status", Boolean.toString(keepplaying));
+        switch (playing) {
             case 0:
                 playing = 1;
                 playPause.setImageResource(R.drawable.ic_pause_circle_outline_white_48dp);
@@ -358,17 +362,16 @@ public class MainActivity extends Activity
         }
     }
 
-    public void showSongTitle(int position) {
-        Record current = MainActivity.searchRecordAdapter.getItem(position);
-        String artist = current.getArtist();
-        String title = current.getTitle();
-        String artistTitle = current.getArtist() + " - " + current.getTitle();
+    public void showSongTitle(Record record) {
+        String artist = record.getArtist();
+        String title = record.getTitle();
+        String artistTitle = record.getArtist() + " - " + record.getTitle();
 
-        if (current.getArtist().length() > 35) {
-            artist = current.getArtist().substring(0, 35) + "...";
+        if (record.getArtist().length() > 35) {
+            artist = record.getArtist().substring(0, 35) + "...";
         }
-        if (current.getTitle().length() > 35) {
-            title = current.getTitle().substring(0, 35) + "...";
+        if (record.getTitle().length() > 35) {
+            title = record.getTitle().substring(0, 35) + "...";
         }
         if (artistTitle.length() > 35) {
             artistTitle = artistTitle.substring(0, 35) + "...";
@@ -403,11 +406,11 @@ public class MainActivity extends Activity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        SharedPreferences.Editor ed  = sPref.edit();
+        SharedPreferences.Editor ed = sPref.edit();
         ed.putInt("record_id", currentRecord.getId());
-        if(currentRecord.getDate() == null){
+        if (currentRecord.getDate() == null) {
             ed.putString("record_location", "local");
-        }else{
+        } else {
             ed.putString("record_location", "server");
         }
 
