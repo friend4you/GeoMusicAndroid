@@ -23,12 +23,10 @@ import java.util.List;
 
 public class SearchRecordAdapter extends ArrayAdapter<Record> {
     private List<Record> records;
-    Context c;
-    LayoutInflater songsInflater;
+    private LayoutInflater songsInflater;
 
     public SearchRecordAdapter(Context context, List<Record> records) {
         super(context, R.layout.record_search_item, records);
-        c = context;
         this.records = records;
     }
 

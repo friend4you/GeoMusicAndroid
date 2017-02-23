@@ -5,20 +5,17 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-import com.example.vlada.geomusicandroidclient.api.model.Record;
-
 import java.io.IOException;
-import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by vlada on 20.02.2017.
@@ -79,20 +76,20 @@ public class MusicService extends Service {
         seekIntent = new Intent(BROADCAST_SEEK);
 
         telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        phoneStateListener = new PhoneStateListener(){
+        phoneStateListener = new PhoneStateListener() {
             @Override
             public void onCallStateChanged(int state, String incomingNumber) {
-                switch (state){
+                switch (state) {
                     case TelephonyManager.CALL_STATE_OFFHOOK:
                     case TelephonyManager.CALL_STATE_RINGING:
-                        if(mediaPlayer != null){
+                        if (mediaPlayer != null) {
                             pause();
                             isPausedInCall = true;
                         }
                         break;
                     case TelephonyManager.CALL_STATE_IDLE:
-                        if(mediaPlayer != null){
-                            if(isPausedInCall){
+                        if (mediaPlayer != null) {
+                            if (isPausedInCall) {
                                 isPausedInCall = false;
                                 play();
                             }
@@ -107,7 +104,7 @@ public class MusicService extends Service {
 
     }
 
-    public int onStartCommand(Intent intent, int flags, int startId){
+    public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
         if (action.equals(PLAY)) {
             play();
@@ -123,8 +120,8 @@ public class MusicService extends Service {
         return START_NOT_STICKY;
     }
 
-    public void play(){
-        if(mPlayPosition != pausedPosition) {
+    public void play() {
+        if (mPlayPosition != pausedPosition) {
             mediaPlayer.reset();
             try {
 
@@ -134,23 +131,22 @@ public class MusicService extends Service {
 
             }
             mediaPlayer.start();
-        }
-        else {
+        } else {
             mediaPlayer.seekTo(pausedTime);
             mediaPlayer.start();
             pausedTime = 0;
         }
     }
 
-    public void pause(){
-        if(mediaPlayer.isPlaying()){
+    public void pause() {
+        if (mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             pausedPosition = mPlayPosition;
             pausedTime = mediaPlayer.getCurrentPosition();
         }
     }
 
-    public void setupHandler(){
+    public void setupHandler() {
         handler.removeCallbacks(sendUpdatesToUI);
         handler.postDelayed(sendUpdatesToUI, 1000);
     }
@@ -163,40 +159,40 @@ public class MusicService extends Service {
         }
     };
 
-    public void LogMediaPosition(){
-        if(mediaPlayer.isPlaying()){
+    public void LogMediaPosition() {
+        if (mediaPlayer.isPlaying()) {
             mediaPosition = mediaPlayer.getCurrentPosition();
             mediaMax = mediaPlayer.getDuration();
+            Log.d(TAG, "LogMediaPosition: playing, mediaPosition: " + mediaPosition + "; mediaMax: " + mediaMax);
             seekIntent.putExtra("current", String.valueOf(mediaPosition));
             seekIntent.putExtra("mediamax", String.valueOf(mediaMax));
             sendBroadcast(seekIntent);
         }
     }
 
-    public void updateSeekPos(Intent intent){
+    public void updateSeekPos(Intent intent) {
         int seekPos = intent.getIntExtra("seekpos", 0);
-        if(mediaPlayer.isPlaying()){
+        if (mediaPlayer.isPlaying()) {
             handler.removeCallbacks(sendUpdatesToUI);
             mediaPlayer.seekTo(seekPos);
             mediaPlayer.start();
             setupHandler();
-        }
-        else{
+        } else {
             pausedTime = seekPos;
         }
     }
 
-    public void onDestroy(){
+    public void onDestroy() {
         super.onDestroy();
 
-        if(mediaPlayer != null){
-            if(mediaPlayer.isPlaying()){
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
             mediaPlayer.release();
         }
 
-        if(phoneStateListener != null){
+        if (phoneStateListener != null) {
             telephonyManager.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
 

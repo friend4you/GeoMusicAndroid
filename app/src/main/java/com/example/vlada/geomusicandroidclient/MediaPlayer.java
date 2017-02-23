@@ -45,7 +45,6 @@ public class MediaPlayer extends Activity{
     NotificationManager notificationManager;
 
 
-    BroadcastReceiver broadcastReceiver;
     BroadcastReceiver seekbr = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -60,6 +59,7 @@ public class MediaPlayer extends Activity{
         seekMax = Integer.parseInt(serviceIntent.getStringExtra("mediamax"));
         timeLine.setMax(seekMax);
         timeLine.setProgress(seekProgress);
+
     }
 
     @Override
@@ -128,8 +128,8 @@ public class MediaPlayer extends Activity{
             }
         });
 
+        registerReceiver(seekbr, new IntentFilter(MusicService.BROADCAST_SEEK));
 
-        registerReceiver(broadcastReceiver, new IntentFilter(BROADCAST_ACTION));
 
 
     }
