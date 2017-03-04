@@ -53,6 +53,7 @@ public class MainActivity extends Activity
     ImageView recordImage;
     ImageView playPause;
     LinearLayout recordStrip;
+    LinearLayout recordStripInfo;
     static Record currentRecord;
 
     final static int PERMISSION_REQUEST_CODE = 555;
@@ -81,12 +82,14 @@ public class MainActivity extends Activity
         recordImage.setImageResource(R.drawable.record_background);
         playPause = (ImageView) findViewById(R.id.main_playPause);
         playPause.setImageResource(R.drawable.ic_play_circle_outline_white_48dp);
-        playPause.setOnClickListener(v -> PlayPause(v));
-        recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
-        recordStrip.setOnClickListener(v -> {
+        playPause.setOnClickListener(this::PlayPause);
+        recordStripInfo = (LinearLayout) findViewById(R.id.main_record_strip_info);
+        recordStripInfo.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, MediaPlayer.class);
             startActivity(intent);
         });
+        recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
+
 
         View page = inflater.inflate(R.layout.playlists_featured, null);
         pages.add(page);
@@ -133,12 +136,19 @@ public class MainActivity extends Activity
                     },
                     PERMISSION_REQUEST_CODE);
         } else {
-            getRecords();
-            if (sPref.getString("record_location", "null") == "local") {
-                recordArtistSelected.setText(recordList.get(sPref.getInt("record_id", 0)).getArtist());
-                recordTitleSelected.setText(recordList.get(sPref.getInt("record_id", 0)).getTitle());
-                currentRecord = recordList.get(sPref.getInt("record_id", 0));
+
+            if (sPref.getInt("record_id", -1) != -1) {
+                recordStrip.setVisibility(LinearLayout.VISIBLE);
+                getRecords();
+                currentRecord = recordList.get(sPref.getInt("record_id", -1));
+                MusicService.activeRecord = recordList.get(sPref.getInt("record_id", -1));
+                recordArtistSelected.setText(currentRecord.getArtist());
+                recordTitleSelected.setText(currentRecord.getTitle());
+            } else {
+                recordStrip.setVisibility(LinearLayout.GONE);
+                getRecords();
             }
+
         }
 
 
@@ -223,6 +233,7 @@ public class MainActivity extends Activity
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<View>();
 
+
         View page = inflater.inflate(R.layout.record_search, null);
         pages.add(page);
 
@@ -234,12 +245,21 @@ public class MainActivity extends Activity
 
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         searchRecordAdapter = new SearchRecordAdapter(recordList, record -> {
+            if (recordStrip.getVisibility() == LinearLayout.GONE) {
+                recordStrip.setVisibility(LinearLayout.VISIBLE);
+            }
             showSongTitle(record);
             keepplaying = true;
             currentRecord = record;
             MusicService.activeRecord = record;
             PlayPause(playPause);
         });
+
+        searchRecordAdapter.notifyDataSetChanged();
+
+        if (searchRecordAdapter.getItemCount() != 0)
+            showSongTitle(MusicService.activeRecord);
+
         musicRecycler = (RecyclerView) findViewById(R.id.music_recycler);
         musicRecycler.setLayoutManager(manager);
         musicRecycler.setAdapter(searchRecordAdapter);
@@ -329,10 +349,7 @@ public class MainActivity extends Activity
             Record n = new Record(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
             recordList.add(n);
         }
-        searchRecordAdapter.notifyDataSetChanged();
 
-        if (searchRecordAdapter.getItemCount() != 0)
-            showSongTitle(MusicService.activeRecord);
     }
 
     public void PlayPause(View view) {
@@ -363,6 +380,8 @@ public class MainActivity extends Activity
     }
 
     public void showSongTitle(Record record) {
+        if (record == null) return;
+
         String artist = record.getArtist();
         String title = record.getTitle();
         String artistTitle = record.getArtist() + " - " + record.getTitle();

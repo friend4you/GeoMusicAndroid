@@ -118,7 +118,7 @@ public class MusicService extends Service {
     }
 
     public void play() {
-        if (activeRecord.equals(pausedRecord)) {
+        if (!activeRecord.equals(pausedRecord)) {
             mediaPlayer.reset();
             try {
                 mediaPlayer.setDataSource(activeRecord.getPath());
