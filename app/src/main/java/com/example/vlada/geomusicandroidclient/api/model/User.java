@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class LoginResponse {
+public class User {
 
     @SerializedName("Categories")
     private List<Object> categories = null;
@@ -57,184 +57,91 @@ public class LoginResponse {
         return categories;
     }
 
-    public void setCategories(List<Object> categories) {
-        this.categories = categories;
-    }
-
     public List<Object> getClaims() {
         return claims;
-    }
-
-    public void setClaims(List<Object> claims) {
-        this.claims = claims;
     }
 
     public List<Object> getFavorites() {
         return favorites;
     }
 
-    public void setFavorites(List<Object> favorites) {
-        this.favorites = favorites;
-    }
-
     public List<Object> getLogins() {
         return logins;
-    }
-
-    public void setLogins(List<Object> logins) {
-        this.logins = logins;
     }
 
     public List<Object> getPlaylists() {
         return playlists;
     }
 
-    public void setPlaylists(List<Object> playlists) {
-        this.playlists = playlists;
-    }
-
     public List<Object> getRoles() {
         return roles;
-    }
-
-    public void setRoles(List<Object> roles) {
-        this.roles = roles;
     }
 
     public List<Object> getSubscribe() {
         return subscribe;
     }
 
-    public void setSubscribe(List<Object> subscribe) {
-        this.subscribe = subscribe;
-    }
-
     public Object getName() {
         return name;
-    }
-
-    public void setName(Object name) {
-        this.name = name;
     }
 
     public Object getSurnname() {
         return surnname;
     }
 
-    public void setSurnname(Object surnname) {
-        this.surnname = surnname;
-    }
-
     public Object getVkToken() {
         return vkToken;
-    }
-
-    public void setVkToken(Object vkToken) {
-        this.vkToken = vkToken;
     }
 
     public Object getGoogleToken() {
         return googleToken;
     }
 
-    public void setGoogleToken(Object googleToken) {
-        this.googleToken = googleToken;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public Boolean getEmailConfirmed() {
         return emailConfirmed;
     }
 
-    public void setEmailConfirmed(Boolean emailConfirmed) {
-        this.emailConfirmed = emailConfirmed;
-    }
-
     public String getPasswordHash() {
         return passwordHash;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
     }
 
     public String getSecurityStamp() {
         return securityStamp;
     }
 
-    public void setSecurityStamp(String securityStamp) {
-        this.securityStamp = securityStamp;
-    }
-
     public Object getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public void setPhoneNumber(Object phoneNumber) {
-        this.phoneNumber = phoneNumber;
     }
 
     public Boolean getPhoneNumberConfirmed() {
         return phoneNumberConfirmed;
     }
 
-    public void setPhoneNumberConfirmed(Boolean phoneNumberConfirmed) {
-        this.phoneNumberConfirmed = phoneNumberConfirmed;
-    }
-
     public Boolean getTwoFactorEnabled() {
         return twoFactorEnabled;
-    }
-
-    public void setTwoFactorEnabled(Boolean twoFactorEnabled) {
-        this.twoFactorEnabled = twoFactorEnabled;
     }
 
     public Object getLockoutEndDateUtc() {
         return lockoutEndDateUtc;
     }
 
-    public void setLockoutEndDateUtc(Object lockoutEndDateUtc) {
-        this.lockoutEndDateUtc = lockoutEndDateUtc;
-    }
-
     public Boolean getLockoutEnabled() {
         return lockoutEnabled;
-    }
-
-    public void setLockoutEnabled(Boolean lockoutEnabled) {
-        this.lockoutEnabled = lockoutEnabled;
     }
 
     public Integer getAccessFailedCount() {
         return accessFailedCount;
     }
 
-    public void setAccessFailedCount(Integer accessFailedCount) {
-        this.accessFailedCount = accessFailedCount;
-    }
-
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getUserName() {
         return userName;
     }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
 }

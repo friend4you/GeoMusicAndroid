@@ -27,10 +27,6 @@ import com.vk.sdk.api.model.VKApiUser;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-/**
- * Created by vlada on 20.01.2017.
- */
-
 public class LoginActivity extends Activity {
 
     final String ACCESS_TOKEN = "access_token";

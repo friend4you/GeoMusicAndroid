@@ -1,4 +1,4 @@
-package com.example.vlada.geomusicandroidclient.Models;
+package com.example.vlada.geomusicandroidclient.models;
 
 public class User {
 
