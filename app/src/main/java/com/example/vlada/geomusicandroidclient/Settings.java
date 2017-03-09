@@ -7,7 +7,7 @@ import android.os.Bundle;
  * Created by vlada on 09.02.2017.
  */
 
-class Settings extends Activity {
+public class Settings extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

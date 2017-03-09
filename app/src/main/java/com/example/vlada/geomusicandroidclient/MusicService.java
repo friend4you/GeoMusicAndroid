@@ -159,6 +159,7 @@ public class MusicService extends Service {
         if (mediaPlayer.isPlaying()) {
             mediaPosition = mediaPlayer.getCurrentPosition();
             mediaMax = mediaPlayer.getDuration();
+
             Log.d(TAG, "LogMediaPosition: playing, mediaPosition: " + mediaPosition + "; mediaMax: " + mediaMax);
             seekIntent.putExtra("current", String.valueOf(mediaPosition));
             seekIntent.putExtra("mediamax", String.valueOf(mediaMax));

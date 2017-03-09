@@ -8,6 +8,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaMetadataRetriever;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -16,7 +17,10 @@ import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.vlada.geomusicandroidclient.api.model.Record;
+
+import java.util.concurrent.TimeUnit;
 
 import static com.example.vlada.geomusicandroidclient.MainActivity.BROADCAST_SEEK_CHANGED;
 import static com.example.vlada.geomusicandroidclient.MainActivity.currentRecord;
@@ -51,6 +55,19 @@ public class MediaPlayer extends Activity {
         seekMax = Integer.parseInt(serviceIntent.getStringExtra("mediamax"));
         timeLine.setMax(seekMax);
         timeLine.setProgress(seekProgress);
+
+        currentTime.setText(String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(seekProgress),
+                TimeUnit.MILLISECONDS.toMinutes(seekProgress) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(seekProgress)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(seekProgress) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(seekProgress))));
+        duration.setText(" / " + String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(seekMax),
+                TimeUnit.MILLISECONDS.toMinutes(seekMax) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(seekMax)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(seekMax) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(seekMax))));
 
     }
 
