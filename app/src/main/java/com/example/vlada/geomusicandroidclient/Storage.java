@@ -26,6 +26,12 @@ public class Storage {
         return sharedPreferences.getBoolean(IS_AUTHORIZED_TAG, false);
     }
 
+    public void setLogin(boolean login) {
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putBoolean(IS_AUTHORIZED_TAG, login);
+        ed.apply();
+    }
+
     public void logout() {
         SharedPreferences.Editor ed = sharedPreferences.edit();
         ed.putBoolean(IS_AUTHORIZED_TAG, false);

@@ -43,7 +43,6 @@ import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static java.lang.annotation.ElementType.METHOD;
 
 public class MainActivity extends FragmentActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -118,10 +117,6 @@ public class MainActivity extends FragmentActivity
         navigationView.setBackgroundColor(Color.argb(255, 50, 200, 255));
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (!Application.getSharedInstance().getStorage().isLoggedIn()) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
         container = (FrameLayout) findViewById(R.id.container);
     }
 
@@ -209,7 +204,7 @@ public class MainActivity extends FragmentActivity
 
     private void logout() {
         Application.getSharedInstance().getStorage().logout();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, SplashActivity.class);
         startActivity(intent);
     }
 
