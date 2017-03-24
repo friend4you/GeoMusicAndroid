@@ -2,6 +2,9 @@ package com.example.vlada.geomusicandroidclient.api;
 
 import com.example.vlada.geomusicandroidclient.api.model.RegistrationResponse;
 import com.example.vlada.geomusicandroidclient.api.model.User;
+import com.example.vlada.geomusicandroidclient.models.Playlist;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -26,4 +29,8 @@ public interface Api {
             @Field("Password") String password,
             @Field("ConfirmPassword") String repeatPassword
     );
+
+    @Headers("Content-Type: application/json")
+    @GET("api/getplaylists")
+    Call<List<Playlist>> getPlaylists();
 }

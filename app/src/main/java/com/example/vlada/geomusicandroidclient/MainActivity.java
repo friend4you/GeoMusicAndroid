@@ -28,7 +28,11 @@ import android.widget.TextView;
 import com.example.vlada.geomusicandroidclient.api.model.Record;
 import com.example.vlada.geomusicandroidclient.events.PlayRecordEvent;
 import com.example.vlada.geomusicandroidclient.events.ShowRecordTitleEvent;
+import com.example.vlada.geomusicandroidclient.fragments.FavouritesFragment;
+import com.example.vlada.geomusicandroidclient.fragments.NearyouFragment;
+import com.example.vlada.geomusicandroidclient.fragments.PlaylistsFragment;
 import com.example.vlada.geomusicandroidclient.fragments.SearchFragment;
+import com.example.vlada.geomusicandroidclient.fragments.SubscribedFragment;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -89,22 +93,6 @@ public class MainActivity extends FragmentActivity
         });
         recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
 
-
-//        View page = inflater.inflate(R.layout.playlists_featured, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_trending, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_categories, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -114,10 +102,11 @@ public class MainActivity extends FragmentActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_playlists);
-        navigationView.setBackgroundColor(Color.argb(255, 50, 200, 255));
+        navigationView.setBackgroundColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
 
         container = (FrameLayout) findViewById(R.id.container);
+        openPlayList();
     }
 
     public void setupPlayerStrip(Record record) {
@@ -192,9 +181,9 @@ public class MainActivity extends FragmentActivity
             case R.id.nav_search:
                 openSearch();
                 break;
-            case R.id.nav_logout:
+            /*case R.id.nav_logout:
                 logout();
-                break;
+                break;*/
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -209,38 +198,14 @@ public class MainActivity extends FragmentActivity
     }
 
     private void openSearch() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//
-//        View page = inflater.inflate(R.layout.record_search, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
         navigationView.setCheckedItem(R.id.nav_search);
         replaceFragment(new SearchFragment());
 
     }
 
     private void openNearYou() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.nearyou_map, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.nearyou_categories, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_nearyou);
+        replaceFragment(new NearyouFragment());
     }
 
     private void openSettings() {
@@ -249,54 +214,18 @@ public class MainActivity extends FragmentActivity
     }
 
     private void openSubscribed() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.subscribed_playlists, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_subscribed);
+        replaceFragment(new SubscribedFragment());
     }
 
     private void openFavourites() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.favorites_records, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_favorites);
+        replaceFragment(new FavouritesFragment());
     }
 
     private void openPlayList() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.playlists_featured, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_trending, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_categories, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_playlists);
+        replaceFragment(new PlaylistsFragment());
     }
 
 

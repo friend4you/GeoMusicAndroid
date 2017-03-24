@@ -2,6 +2,10 @@ package com.example.vlada.geomusicandroidclient.api;
 
 import com.example.vlada.geomusicandroidclient.api.model.RegistrationResponse;
 import com.example.vlada.geomusicandroidclient.api.model.User;
+import com.example.vlada.geomusicandroidclient.models.Playlist;
+
+import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -26,6 +30,10 @@ public class GeomusicService {
 
     public Observable<RegistrationResponse> registration(String userName, String email, String password, String repeatPassword) {
         Call<RegistrationResponse> call = api.registerUser(userName, email, password, repeatPassword);
+        return Observable.fromCallable(() -> call.execute().body());
+    }
+    public Observable<List<Playlist>> getPlaylists(){
+        Call<List<Playlist>> call = api.getPlaylists();
         return Observable.fromCallable(() -> call.execute().body());
     }
 }

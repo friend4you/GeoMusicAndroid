@@ -5,23 +5,12 @@
     android:contentDescription="Featured"
     android:layout_height="match_parent">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/main_records_pager"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:visibility="visible">
-    </android.support.v4.view.ViewPager>
-
-    <LinearLayout
-        android:orientation="vertical"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/featured_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></LinearLayout>
-    </LinearLayout>
+    </android.support.v7.widget.RecyclerView>
 
 
 </LinearLayout>
