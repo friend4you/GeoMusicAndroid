@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.vlada.geomusicandroidclient.api.model.Record;
+import com.example.vlada.geomusicandroidclient.api.model.User;
 import com.example.vlada.geomusicandroidclient.events.PlayRecordEvent;
 import com.example.vlada.geomusicandroidclient.events.ShowRecordTitleEvent;
 import com.example.vlada.geomusicandroidclient.fragments.FavouritesFragment;
@@ -64,11 +65,14 @@ public class MainActivity extends FragmentActivity
     public static Record currentRecord;
     private FrameLayout container;
     private int lastRecordId;
+    private ImageView userImage;
+    private TextView userName;
 
     final static String BROADCAST_ACTION = "BROADCAST_ACTION";
     public static final String BROADCAST_SEEK_CHANGED = "SEEK_CHANGED";
     static boolean keepplaying = false;
     static int playing = 0;
+
 
 
     @Override
@@ -77,6 +81,7 @@ public class MainActivity extends FragmentActivity
         setContentView(R.layout.activity_main);
         LayoutInflater inflater = LayoutInflater.from(this);
         List<View> pages = new ArrayList<View>();
+
 
 
         recordArtistSelected = (TextView) findViewById(R.id.record_author_selected);
@@ -105,9 +110,22 @@ public class MainActivity extends FragmentActivity
         navigationView.setBackgroundColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
 
+
+
+        userImage = (ImageView) findViewById(R.id.navbar_userImage);
+        if(Application.getSharedInstance().getStorage().getUserImage() == "Default"){
+            userImage.setImageResource(R.drawable.ic_account_circle_black_48dp);
+        }else{
+
+        }
+        userName = (TextView) findViewById(R.id.navbar_userName);
+        userName.setText(Application.getSharedInstance().getStorage().getUserNickname());
+
         container = (FrameLayout) findViewById(R.id.container);
         openPlayList();
     }
+
+
 
     public void setupPlayerStrip(Record record) {
         if(record == null) {
@@ -181,9 +199,9 @@ public class MainActivity extends FragmentActivity
             case R.id.nav_search:
                 openSearch();
                 break;
-            /*case R.id.nav_logout:
+            case R.id.nav_logout:
                 logout();
-                break;*/
+                break;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -259,25 +277,13 @@ public class MainActivity extends FragmentActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
-            @Override
-            public void onResult(VKAccessToken res) {
-                // User passed Authorization
-            }
-
-            @Override
-            public void onError(VKError error) {
-                // User didn't pass Authorization
-            }
-        })) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+
     }
 
     @Override

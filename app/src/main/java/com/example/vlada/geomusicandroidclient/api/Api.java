@@ -1,8 +1,8 @@
 package com.example.vlada.geomusicandroidclient.api;
 
+import com.example.vlada.geomusicandroidclient.api.model.LoginResponse;
+import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 import com.example.vlada.geomusicandroidclient.api.model.RegistrationResponse;
-import com.example.vlada.geomusicandroidclient.api.model.User;
-import com.example.vlada.geomusicandroidclient.models.Playlist;
 
 import java.util.List;
 
@@ -18,7 +18,7 @@ public interface Api {
 
     @Headers("Content-Type: application/json")
     @GET("Account/JsonLogin")
-    Call<User> getUserJson(@Query("email") String email, @Query("password") String password);
+    Call<LoginResponse> getUserJson(@Query("email") String email, @Query("password") String password);
 
     @FormUrlEncoded
     @Headers("client: mobile")

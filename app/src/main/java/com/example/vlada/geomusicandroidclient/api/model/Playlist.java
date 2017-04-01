@@ -1,5 +1,8 @@
-package com.example.vlada.geomusicandroidclient.models;
+package com.example.vlada.geomusicandroidclient.api.model;
 
+
+import com.example.vlada.geomusicandroidclient.api.model.Category;
+import com.example.vlada.geomusicandroidclient.models.*;
 
 import java.util.HashMap;
 import java.util.List;

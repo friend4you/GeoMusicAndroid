@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.vlada.geomusicandroidclient.api.model.Record;
+import com.example.vlada.geomusicandroidclient.api.model.User;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -53,5 +54,29 @@ public class Storage {
 
     public int getLastRecordId() {
         return sharedPreferences.getInt("record_id", -1);
+    }
+
+    public void saveUserInfo(User user) {
+        SharedPreferences.Editor ed = sharedPreferences.edit();
+        ed.putString("TOKEN", user.getToken());
+        ed.putString("USER_ID", user.getId());
+        ed.putString("USER_NICKNAME", user.getUserName());
+        ed.putString("USER_IMAGE", user.getUserImage());
+    }
+
+    public String getUserToken() {
+        return sharedPreferences.getString("TOKEN", "0");
+    }
+
+    public String getUserId() {
+        return sharedPreferences.getString("USER_ID", "0");
+    }
+
+    public String getUserNickname() {
+        return sharedPreferences.getString("USER_NICKNAME", "DefaultUserName");
+    }
+
+    public String getUserImage() {
+        return sharedPreferences.getString("USER_IMAGE", "Default");
     }
 }

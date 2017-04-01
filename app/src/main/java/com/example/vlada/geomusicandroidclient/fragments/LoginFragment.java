@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vlada.geomusicandroidclient.Application;
@@ -27,6 +29,7 @@ public class LoginFragment extends Fragment {
     private EditText mEditTextEmail;
     private View mProgressView;
     private View mLoginFormView;
+    private TextView register;
 
 
     @Override
@@ -54,16 +57,30 @@ public class LoginFragment extends Fragment {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             loginResponse -> {
-                                Log.d("response", loginResponse.getEmail());
-                                Application.getSharedInstance().getStorage().setLogin(true);
-                                Intent intent = new Intent(getActivity(), MainActivity.class);
-                                startActivity(intent);
-                                getActivity().finish();
+                                if (loginResponse.getResult() == 0) {
+                                    Log.d("response", loginResponse.getUser().getEmail());
+                                    Application.getSharedInstance().getStorage().setLogin(true);
+                                    Application.getSharedInstance().getStorage().saveUserInfo(loginResponse.getUser());
+                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                    startActivity(intent);
+                                    getActivity().finish();
+                                } else {
+                                    showProgress(false);
+                                    Toast.makeText(getActivity(), "Failed to login", Toast.LENGTH_SHORT).show();
+                                }
+
                             }, error -> {
                                 showProgress(false);
                                 Log.d("failure", "failure");
                                 Toast.makeText(getActivity(), "Failed to login", Toast.LENGTH_SHORT).show();
                             });
+        });
+        register = (TextView) view.findViewById(R.id.textViewRegister);
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                replaceFragment(new RegisterFragment());
+            }
         });
     }
 
@@ -75,5 +92,12 @@ public class LoginFragment extends Fragment {
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

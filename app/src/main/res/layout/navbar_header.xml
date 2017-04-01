@@ -17,25 +17,25 @@
 
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/navbar_userImage"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center"
-
             app:srcCompat="@drawable/ic_account_circle_black_48dp" />
 
         <TextView
+            android:id="@+id/navbar_userName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:gravity="center"
             android:textColor="@color/vk_black"
             android:layout_marginBottom="10dp"
-            android:text="UserName"
+            android:text="@string/user_name"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/navbar_manageButton"
             android:layout_width="170dp"
             android:layout_height="25dp"
             android:layout_gravity="center"

@@ -2,9 +2,6 @@ package com.example.vlada.geomusicandroidclient.adapters;
 
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +12,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.vlada.geomusicandroidclient.R;
-import com.example.vlada.geomusicandroidclient.models.Playlist;
+import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
 import java.util.List;
 

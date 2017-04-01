@@ -1,4 +1,4 @@
-package com.example.vlada.geomusicandroidclient.models;
+package com.example.vlada.geomusicandroidclient.api.model;
 
 import java.util.HashMap;
 import java.util.Map;

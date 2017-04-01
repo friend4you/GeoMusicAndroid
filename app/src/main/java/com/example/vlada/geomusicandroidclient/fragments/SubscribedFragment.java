@@ -14,7 +14,7 @@ import android.widget.Toast;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.adapters.SubscribedRecyclerAdapter;
 import com.example.vlada.geomusicandroidclient.api.ServiceGenerator;
-import com.example.vlada.geomusicandroidclient.models.Playlist;
+import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
 import java.util.List;
 

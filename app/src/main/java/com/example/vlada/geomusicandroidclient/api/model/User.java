@@ -20,16 +20,14 @@ public class User {
     private List<Object> roles = null;
     @SerializedName("Subscribe")
     private List<Object> subscribe = null;
-    @SerializedName("Name")
-    private Object name;
-    @SerializedName("Surnname")
-    private Object surnname;
-    @SerializedName("VkToken")
-    private Object vkToken;
-    @SerializedName("GoogleToken")
-    private Object googleToken;
+    @SerializedName("Token")
+    private String token;
+    @SerializedName("ExpireTime")
+    private Object expireTime;
     @SerializedName("Email")
     private String email;
+    @SerializedName("UserImage")
+    private String userImage;
     @SerializedName("EmailConfirmed")
     private Boolean emailConfirmed;
     @SerializedName("PasswordHash")
@@ -81,25 +79,19 @@ public class User {
         return subscribe;
     }
 
-    public Object getName() {
-        return name;
+    public String getToken() {
+        return token;
     }
 
-    public Object getSurnname() {
-        return surnname;
-    }
-
-    public Object getVkToken() {
-        return vkToken;
-    }
-
-    public Object getGoogleToken() {
-        return googleToken;
+    public Object getExpireTime() {
+        return expireTime;
     }
 
     public String getEmail() {
         return email;
     }
+
+    public String getUserImage(){ return userImage; }
 
     public Boolean getEmailConfirmed() {
         return emailConfirmed;

@@ -1,11 +1,10 @@
 package com.example.vlada.geomusicandroidclient.api;
 
+import com.example.vlada.geomusicandroidclient.api.model.LoginResponse;
 import com.example.vlada.geomusicandroidclient.api.model.RegistrationResponse;
-import com.example.vlada.geomusicandroidclient.api.model.User;
-import com.example.vlada.geomusicandroidclient.models.Playlist;
+import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -23,8 +22,8 @@ public class GeomusicService {
         api = retrofit.create(Api.class);
     }
 
-    public Observable<User> login(String email, String password) {
-        Call<User> repos = api.getUserJson(email, password);
+    public Observable<LoginResponse> login(String email, String password) {
+        Call<LoginResponse> repos = api.getUserJson(email, password);
         return Observable.fromCallable(() -> repos.execute().body());
     }
 

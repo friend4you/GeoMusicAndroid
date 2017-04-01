@@ -4,26 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.example.vlada.geomusicandroidclient.MainPagerAdapter;
 import com.example.vlada.geomusicandroidclient.R;
-import com.example.vlada.geomusicandroidclient.adapters.SubscribedRecyclerAdapter;
-import com.example.vlada.geomusicandroidclient.api.ServiceGenerator;
-import com.example.vlada.geomusicandroidclient.models.Playlist;
+import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 
 public class PlaylistsFragment extends Fragment {
