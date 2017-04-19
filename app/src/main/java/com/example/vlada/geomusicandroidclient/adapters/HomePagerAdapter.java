@@ -32,7 +32,6 @@ public class HomePagerAdapter extends PagerAdapter {
             add(HomeScreens.TRENDING);
             add(HomeScreens.CATEGORIES);
         }};
-
     }
 
     @Override
@@ -55,22 +54,21 @@ public class HomePagerAdapter extends PagerAdapter {
         Object object = null;
         switch (HomeScreens.values()[position]){
             case HOME:
-                View home = inflater.inflate(R.layout.playlists_featured, collection, false);
-                object = new HomeController(home);
-                collection.addView(home);
+                view = inflater.inflate(R.layout.playlists_featured, collection, false);
+                object = new HomeController(view);
                 break;
             case TRENDING:
-                View trend = inflater.inflate(R.layout.playlists_trending, collection, false);
-                object = new TrendingController(trend);
-                collection.addView(trend);
+                view = inflater.inflate(R.layout.playlists_trending, collection, false);
+                object = new TrendingController(view);
                 break;
             case CATEGORIES:
-                View cat = inflater.inflate(R.layout.categories, collection, false);
-                object = new CategoryController(cat);
-                collection.addView(cat);
+                view = inflater.inflate(R.layout.categories, collection, false);
+                object = new CategoryController(view);
+
                 break;
         }
-        collection.setTag(object);
+        view.setTag(object);
+        collection.addView(view);
         return object;
     }
 

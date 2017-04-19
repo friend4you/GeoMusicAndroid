@@ -38,6 +38,7 @@ public class PlaylistsFragment extends Fragment {
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.playlists_pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(0);
+        viewPager.setOffscreenPageLimit(3);
         TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
         tabLayout.setupWithViewPager(viewPager);
