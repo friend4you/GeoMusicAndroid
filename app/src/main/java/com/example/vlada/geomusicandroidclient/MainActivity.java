@@ -1,17 +1,23 @@
 package com.example.vlada.geomusicandroidclient;
 
+import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ActionBarContainer;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,8 +31,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.example.vlada.geomusicandroidclient.adapters.HomePagerAdapter;
 import com.example.vlada.geomusicandroidclient.api.model.Record;
-import com.example.vlada.geomusicandroidclient.api.model.User;
 import com.example.vlada.geomusicandroidclient.events.PlayRecordEvent;
 import com.example.vlada.geomusicandroidclient.events.ShowRecordTitleEvent;
 import com.example.vlada.geomusicandroidclient.fragments.FavouritesFragment;
@@ -34,10 +42,6 @@ import com.example.vlada.geomusicandroidclient.fragments.NearyouFragment;
 import com.example.vlada.geomusicandroidclient.fragments.PlaylistsFragment;
 import com.example.vlada.geomusicandroidclient.fragments.SearchFragment;
 import com.example.vlada.geomusicandroidclient.fragments.SubscribedFragment;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -49,7 +53,7 @@ import java.util.List;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -68,26 +72,23 @@ public class MainActivity extends FragmentActivity
     private ImageView userImage;
     private TextView userName;
 
+    //final ActionBar actionBar = getActionBar();
     final static String BROADCAST_ACTION = "BROADCAST_ACTION";
     public static final String BROADCAST_SEEK_CHANGED = "SEEK_CHANGED";
     static boolean keepplaying = false;
     static int playing = 0;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        List<View> pages = new ArrayList<View>();
-
 
 
         recordArtistSelected = (TextView) findViewById(R.id.record_author_selected);
         recordTitleSelected = (TextView) findViewById(R.id.record_title_selected);
         recordImage = (ImageView) findViewById(R.id.imageView4);
-        recordImage.setImageResource(R.drawable.record_background);
+        recordImage.setImageResource(R.drawable.retro);
         playPause = (ImageView) findViewById(R.id.main_playPause);
         playPause.setImageResource(R.drawable.ic_play_circle_outline_white_48dp);
         playPause.setOnClickListener(this::playPause);
@@ -99,6 +100,10 @@ public class MainActivity extends FragmentActivity
         recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Playlists");
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -110,25 +115,40 @@ public class MainActivity extends FragmentActivity
         navigationView.setBackgroundColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-
-        userImage = (ImageView) findViewById(R.id.navbar_userImage);
-        if(Application.getSharedInstance().getStorage().getUserImage() == "Default"){
-            userImage.setImageResource(R.drawable.ic_account_circle_black_48dp);
-        }else{
-
-        }
-        userName = (TextView) findViewById(R.id.navbar_userName);
-        userName.setText(Application.getSharedInstance().getStorage().getUserNickname());
-
         container = (FrameLayout) findViewById(R.id.container);
         openPlayList();
+
+        View headerView = navigationView.getHeaderView(0);
+        userImage = (ImageView) headerView.findViewById(R.id.navbar_userImage);
+        Glide.with(this)
+                .load(Application.getSharedInstance().getStorage().getUserImage())
+                .asBitmap()
+                .placeholder(R.drawable.ic_account_circle_black_48dp)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(userImage) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                        roundedBitmapDrawable.setCircular(true);
+                        userImage.setImageDrawable(roundedBitmapDrawable);
+                    }
+                });
+
+
+        userImage.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AccountManager.class);
+            startActivity(intent);
+        });
+        userName = (TextView) headerView.findViewById(R.id.navbar_userName);
+        userName.setText(Application.getSharedInstance().getStorage().getUserNickname());
+
+        openPlayList();
+
     }
 
 
-
     public void setupPlayerStrip(Record record) {
-        if(record == null) {
+        if (record == null) {
             recordStrip.setVisibility(GONE);
             return;
         }
@@ -140,17 +160,8 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
+        inflater.inflate(R.menu.main, menu);
         return true;
     }
 
@@ -217,12 +228,14 @@ public class MainActivity extends FragmentActivity
 
     private void openSearch() {
         navigationView.setCheckedItem(R.id.nav_search);
+        getSupportActionBar().setTitle("Search");
         replaceFragment(new SearchFragment());
 
     }
 
     private void openNearYou() {
         navigationView.setCheckedItem(R.id.nav_nearyou);
+        getSupportActionBar().setTitle("Near you");
         replaceFragment(new NearyouFragment());
     }
 
@@ -233,19 +246,21 @@ public class MainActivity extends FragmentActivity
 
     private void openSubscribed() {
         navigationView.setCheckedItem(R.id.nav_subscribed);
+        getSupportActionBar().setTitle("Subscibed");
         replaceFragment(new SubscribedFragment());
     }
 
     private void openFavourites() {
         navigationView.setCheckedItem(R.id.nav_favorites);
+        getSupportActionBar().setTitle("Favorites");
         replaceFragment(new FavouritesFragment());
     }
 
     private void openPlayList() {
         navigationView.setCheckedItem(R.id.nav_playlists);
+        getSupportActionBar().setTitle("Playlists");
         replaceFragment(new PlaylistsFragment());
     }
-
 
 
     public void playPause(View view) {

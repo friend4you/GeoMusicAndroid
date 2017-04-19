@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/card_view"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
@@ -9,38 +9,50 @@
     android:layout_marginRight="5dp"
     card_view:cardUseCompatPadding="true">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/category_griditem_info"
-            android:padding="15dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <FrameLayout
+        android:id="@+id/top_row_container"
+        android:layout_width="0dp"
+        android:layout_height="46dp"
+        android:padding="15dp"
+        card_view:layout_constraintHorizontal_bias="1.0"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_absoluteHeight="46dp"
+        tools:layout_conversion_absoluteWidth="396dp"
+        tools:layout_conversion_absoluteX="2dp"
+        tools:layout_conversion_absoluteY="3dp">
 
-            <TextView
-                android:id="@+id/categoryNameTV"
-                android:layout_gravity="start"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="TextView" />
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:text="TextView" />
 
-            <TextView
-                android:id="@+id/seemoreTV"
-                android:layout_gravity="end"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/see_all" />
+        <TextView
+            android:id="@+id/seemore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="@string/see_all" />
 
-        </FrameLayout>
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/playlist_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="0dp"
+        android:orientation="vertical"
+        card_view:layout_constraintBottom_toBottomOf="parent"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/top_row_container"></LinearLayout>
 
 
-        <GridView
-            android:id="@+id/playlistsHolderGridView"
-            android:layout_below="@id/category_griditem_info"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
-
-</android.support.v7.widget.CardView>
+</android.support.constraint.ConstraintLayout>

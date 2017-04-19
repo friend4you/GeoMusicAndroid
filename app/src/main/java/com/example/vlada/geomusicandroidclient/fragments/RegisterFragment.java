@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,8 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.vlada.geomusicandroidclient.Application;
-import com.example.vlada.geomusicandroidclient.MainActivity;
 import com.example.vlada.geomusicandroidclient.R;
+import com.example.vlada.geomusicandroidclient.SelectCategory;
 import com.example.vlada.geomusicandroidclient.api.ServiceGenerator;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -59,7 +60,11 @@ public class RegisterFragment extends Fragment {
 
         registerButton.setOnClickListener(v -> {
             showProgress(true);
-            ServiceGenerator.getGeomusicService().registration(mEditTextUserName.getText().toString(), mEditTextEmail.getText().toString(), mEditTextPassword.getText().toString(), mEditTextConfirm.getText().toString())
+            ServiceGenerator.getGeomusicService().registration(
+                    mEditTextUserName.getText().toString(),
+                    mEditTextEmail.getText().toString(),
+                    mEditTextPassword.getText().toString(),
+                    mEditTextConfirm.getText().toString())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
@@ -67,7 +72,7 @@ public class RegisterFragment extends Fragment {
                                 if (registrationResponse.getResult().getSucceeded()) {
                                     Application.getSharedInstance().getStorage().setLogin(true);
                                     Application.getSharedInstance().getStorage().saveUserInfo(registrationResponse.getUser());
-                                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                                    Intent intent = new Intent(getActivity(), SelectCategory.class);
                                     startActivity(intent);
                                     getActivity().finish();
                                 } else {
@@ -88,5 +93,12 @@ public class RegisterFragment extends Fragment {
     private void showProgress(final boolean show) {
         mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
         mRegisterFormView.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    public void replaceFragment(Fragment someFragment) {
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, someFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.vlada.geomusicandroidclient;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.vk.sdk.VKAccessToken;
@@ -12,15 +13,6 @@ public class Application extends android.app.Application{
     private Storage storage;
 
 
-    VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
-        @Override
-        public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
-            if (newToken == null) {
-                Log.d("onTokenChanged", "newToken == null");
-            }
-        }
-    };
-
 
 
     @Override
@@ -28,9 +20,7 @@ public class Application extends android.app.Application{
         super.onCreate();
         application = this;
         storage = new Storage(this);
-        vkAccessTokenTracker.startTracking();
         Log.d("onCreate Application", "begin");
-        VKSdk.initialize(this);
         Log.d("onCreate Application", "end");
 
     }

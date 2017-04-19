@@ -10,14 +10,16 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay" >
+
+        </android.support.v7.widget.Toolbar>
 
 
     </android.support.design.widget.AppBarLayout>
@@ -29,8 +31,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <!--<include layout="@layout/content_main" />-->
-
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
@@ -39,7 +39,7 @@
         android:layout_marginBottom="81dp"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:srcCompat="@drawable/ic_add_black_48dp" />
 
 
     <LinearLayout
@@ -62,13 +62,14 @@
                 android:layout_height="50dp"
                 android:layout_gravity="center"
                 android:layout_margin="4dp"
-                app:srcCompat="@drawable/record_background" />
+                app:srcCompat="@drawable/retro" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_marginBottom="2dp"
-                android:layout_marginTop="2dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
                 android:layout_toRightOf="@+id/imageView4"
                 android:layout_weight="1"
                 android:orientation="vertical">
@@ -78,7 +79,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Author"
+                    android:text="Twenty One Pilots"
                     android:textColor="@color/vk_white"
                     android:textSize="18sp" />
 
@@ -87,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:text="Title"
+                    android:text="Stressed Out"
                     android:textColor="@color/vk_white"
                     android:textSize="16sp" />
             </LinearLayout>

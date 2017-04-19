@@ -14,7 +14,8 @@ public class SplashActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-        if (Application.getSharedInstance().getStorage().isLoggedIn()) {
+        if (true) {
+        //if (Application.getSharedInstance().getStorage().isLoggedIn()) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();

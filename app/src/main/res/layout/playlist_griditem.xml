@@ -1,49 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/card_view"
-    android:layout_width="120dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardUseCompatPadding="true"
+    android:layout_marginBottom="16dp"
     android:layout_marginLeft="5dp"
     android:layout_marginRight="5dp"
-    android:layout_marginBottom="16dp">
+    card_view:cardUseCompatPadding="true">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/playlist_gridItemImage"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:contentDescription="@string/action_settings"
-            android:scaleType="centerCrop"
-            card_view:srcCompat="@drawable/record_background" />
+    <ImageView
+        android:id="@+id/playlist_gridItemImage"
+        android:layout_width="0dp"
+        android:layout_height="120dp"
+        android:scaleType="fitCenter"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toTopOf="parent"
+        card_view:layout_constraintHorizontal_bias="0.0" />
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        card_view:layout_constraintHorizontal_bias="0.0"
+        card_view:layout_constraintLeft_toLeftOf="parent"
+        card_view:layout_constraintRight_toRightOf="parent"
+        card_view:layout_constraintTop_toBottomOf="@+id/playlist_gridItemImage"
+        android:layout_marginRight="0dp"
+        android:layout_marginLeft="0dp">
 
         <TextView
             android:id="@+id/playlist_gridItemTitle"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:textSize="13sp"
+            android:background="@color/vk_share_link_title_color"
             android:padding="2dp"
             android:text="Playlist Title"
             android:textColor="@color/vk_white"
-            android:layout_below="@+id/playlist_gridItemImage"
-            android:background="@color/colorPrimaryDark"/>
+            android:textSize="13sp"
+            tools:layout_conversion_absoluteHeight="35dp"
+            tools:layout_conversion_absoluteWidth="114dp"
+            tools:layout_conversion_absoluteX="2dp"
+            tools:layout_conversion_absoluteY="123dp"
+            tools:layout_editor_absoluteX="113dp"
+            tools:layout_editor_absoluteY="185dp" />
 
         <TextView
             android:id="@+id/playlist_gridItemAuthor"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:background="@color/vk_share_link_title_color"
             android:padding="3dp"
             android:text="playlist title"
             android:textColor="@color/vk_white"
-            android:layout_below="@+id/playlist_gridItemTitle"
-            android:background="@color/colorPrimaryDark"/>
+            android:textSize="10sp"
+            card_view:layout_constraintHorizontal_bias="0.0"
+            card_view:layout_constraintLeft_toLeftOf="parent"
+            card_view:layout_constraintRight_toRightOf="@+id/linearLayout2"
+            tools:layout_conversion_absoluteHeight="18dp"
+            tools:layout_conversion_absoluteWidth="114dp"
+            tools:layout_conversion_absoluteX="2dp"
+            tools:layout_conversion_absoluteY="158dp"
+            tools:layout_editor_absoluteY="158dp" />
 
-    </RelativeLayout>
+    </LinearLayout>
 
-</android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

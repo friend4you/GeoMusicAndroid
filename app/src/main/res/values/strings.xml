@@ -22,5 +22,9 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="login">Login</string>
     <string name="log_in">Log in</string>
+    <string name="change_password">Change Password</string>
+    <string name="confirm">Confirm</string>
+    <string name="playlists">Playlists</string>
+    <string name="select_categories">Select categories</string>
 
 </resources>

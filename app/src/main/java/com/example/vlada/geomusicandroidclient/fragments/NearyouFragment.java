@@ -8,7 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.vlada.geomusicandroidclient.MainPagerAdapter;
+import com.example.vlada.geomusicandroidclient.adapters.HomePagerAdapter;
 import com.example.vlada.geomusicandroidclient.R;
 
 import java.util.ArrayList;
@@ -24,19 +24,19 @@ public class NearyouFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        List<View> pages = new ArrayList<>();
-
-        View page = inflater.inflate(R.layout.nearyou_map, null);
-        pages.add(page);
-
-        page = inflater.inflate(R.layout.categories, null);
-        pages.add(page);
-
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-        ViewPager viewPager = (ViewPager) view.findViewById(R.id.nearyou_pager);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(0);
+//        LayoutInflater inflater = LayoutInflater.from(getActivity());
+//        List<View> pages = new ArrayList<>();
+//
+//        View page = inflater.inflate(R.layout.nearyou_map, null);
+//        pages.add(page);
+//
+//        page = inflater.inflate(R.layout.categories, null);
+//        pages.add(page);
+//
+//        HomePagerAdapter pagerAdapter = new HomePagerAdapter(pages);
+//        ViewPager viewPager = (ViewPager) view.findViewById(R.id.nearyou_pager);
+//        viewPager.setAdapter(pagerAdapter);
+//        viewPager.setCurrentItem(0);
     }
 
     @Nullable

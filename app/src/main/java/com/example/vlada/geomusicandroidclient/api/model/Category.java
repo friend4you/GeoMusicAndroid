@@ -1,15 +1,21 @@
 package com.example.vlada.geomusicandroidclient.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Category {
 
-
+    @SerializedName("Name")
     private String name;
+    @SerializedName("Description")
     private String description;
+    @SerializedName("Image")
     private String image;
+    @SerializedName("Color")
     private String color;
+    @SerializedName("id")
     private Integer id;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
@@ -61,4 +67,19 @@ public class Category {
         this.additionalProperties.put(name, value);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Category category = (Category) o;
+
+        return id.equals(category.id);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
 }

@@ -1,7 +1,10 @@
 package com.example.vlada.geomusicandroidclient.fragments;
 
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,8 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.vlada.geomusicandroidclient.MainPagerAdapter;
 import com.example.vlada.geomusicandroidclient.R;
+import com.example.vlada.geomusicandroidclient.adapters.HomePagerAdapter;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
 import java.util.ArrayList;
@@ -19,12 +22,6 @@ import java.util.List;
 
 
 public class PlaylistsFragment extends Fragment {
-
-    private List<Playlist> trendingPlaylist;
-    private List<Playlist> top3Playlist;
-    private List<Playlist> category1Playlist;
-    private List<Playlist> category2Playlist;
-    private List<Playlist> category3Playlist;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,22 +34,14 @@ public class PlaylistsFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        List<View> pages = new ArrayList<>();
-
-        View page = inflater.inflate(R.layout.playlists_featured, null);
-        pages.add(page);
-
-        page = inflater.inflate(R.layout.playlists_trending, null);
-        pages.add(page);
-
-        page = inflater.inflate(R.layout.categories, null);
-        pages.add(page);
-
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
+        HomePagerAdapter pagerAdapter = new HomePagerAdapter();
         ViewPager viewPager = (ViewPager) view.findViewById(R.id.playlists_pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(0);
+        TabLayout tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
+        tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        tabLayout.setupWithViewPager(viewPager);
+
     }
 
     @Override
@@ -62,38 +51,4 @@ public class PlaylistsFragment extends Fragment {
 
     }
 
-    public View fillFeatured(View page, View view){
-
-        /*ServiceGenerator.getGeomusicService().getPlaylists()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        response -> {
-                            playlists = response;
-                            lLayout = new GridLayoutManager(getActivity(), 3);
-                            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subscribed_recyclerView);
-                            recyclerView.setHasFixedSize(true);
-                            recyclerView.setLayoutManager(lLayout);
-                            SubscribedRecyclerAdapter subrAdapter = new SubscribedRecyclerAdapter(getActivity(), response);
-                            recyclerView.setAdapter(subrAdapter);
-                        }, error -> {
-                            Log.d("failure", "failure");
-                            Toast.makeText(getActivity(), "Failed to get Subscribed", Toast.LENGTH_SHORT).show();
-                        });
-*/
-        return page;
-    }
-
-    public View fillTrending(View page){
-
-        RecyclerView trendingRecycler = (RecyclerView) getView().findViewById(R.id.trending_recycler);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-
-        return page;
-    }
-
-    public View fillCategories(View page){
-
-        return page;
-    }
 }

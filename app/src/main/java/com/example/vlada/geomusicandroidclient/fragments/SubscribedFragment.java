@@ -11,11 +11,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.vlada.geomusicandroidclient.Application;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.adapters.SubscribedRecyclerAdapter;
 import com.example.vlada.geomusicandroidclient.api.ServiceGenerator;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -23,8 +25,10 @@ import rx.schedulers.Schedulers;
 
 public class SubscribedFragment extends Fragment {
 
+    private RecyclerView recycler;
     private List<Playlist> playlists;
-    private GridLayoutManager lLayout;
+
+    private SubscribedRecyclerAdapter adapter;
 
     @Nullable
     @Override
@@ -36,19 +40,30 @@ public class SubscribedFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        recycler = (RecyclerView) view.findViewById(R.id.subscribed_recyclerView);
+        recycler.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        if (adapter == null) {
+            adapter = new SubscribedRecyclerAdapter();
+        }
 
+        recycler.setAdapter(adapter);
+
+        playlists = Application.getSharedInstance().getStorage().getPlaylists();
+        if (playlists == null) {
+            playlists = new ArrayList<>();
+        }
+
+        adapter.add(playlists);
+        //fetchPlaylist();
+    }
+
+    private void fetchPlaylist() {
         ServiceGenerator.getGeomusicService().getPlaylists()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        response -> {
-                            playlists = response;
-                            lLayout = new GridLayoutManager(getActivity(), 3);
-                            RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.subscribed_recyclerView);
-                            recyclerView.setHasFixedSize(true);
-                            recyclerView.setLayoutManager(lLayout);
-                            SubscribedRecyclerAdapter subrAdapter = new SubscribedRecyclerAdapter(getActivity(), response);
-                            recyclerView.setAdapter(subrAdapter);
+                        playlists -> {
+                            adapter.add(playlists);
                         }, error -> {
                             Log.d("failure", "failure");
                             Toast.makeText(getActivity(), "Failed to get Subscribed", Toast.LENGTH_SHORT).show();

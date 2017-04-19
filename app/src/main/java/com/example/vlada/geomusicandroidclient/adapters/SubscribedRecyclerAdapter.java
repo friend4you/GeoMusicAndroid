@@ -1,8 +1,9 @@
 package com.example.vlada.geomusicandroidclient.adapters;
 
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
+import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,43 +15,39 @@ import com.bumptech.glide.Glide;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class SubscribedRecyclerAdapter extends RecyclerView.Adapter<RecyclerViewHolders> {
+public class SubscribedRecyclerAdapter extends Adapter<ViewHolder> {
 
     private List<Playlist> itemList;
-    private Context context;
 
-    public SubscribedRecyclerAdapter(Context context, List<Playlist> itemList) {
-        this.itemList = itemList;
-        this.context = context;
+    public SubscribedRecyclerAdapter() {
+        this.itemList = new ArrayList<>();
+        setHasStableIds(true);
     }
 
     @Override
-    public RecyclerViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
+    public long getItemId(int position) {
+        return itemList.get(position).getId();
+    }
 
-
-
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_griditem, null);
-        RecyclerViewHolders rcv = new RecyclerViewHolders(layoutView);
-        return rcv;
+    public void add(List<Playlist> itemList) {
+        this.itemList.clear();
+        this.itemList.addAll(itemList);
+        notifyDataSetChanged();
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolders holder, int position) {
-        holder.playlistAuthor.setText(itemList.get(position).getAuthor());
-        holder.playlistTitle.setText(itemList.get(position).getTitle());
-        String url;
-        url = itemList.get(position).getImage();
-        Glide.with(context)
-                .load(url)
-                .placeholder(R.drawable.record_background)
-                .centerCrop()
-                .into(holder.playlistImage);
+    public PlaylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_griditem, parent, false);
+        return new PlaylistViewHolder(layoutView);
     }
 
-
-
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        ((PlaylistViewHolder) holder).bind(itemList.get(position));
+    }
 
 
     @Override
@@ -58,24 +55,36 @@ public class SubscribedRecyclerAdapter extends RecyclerView.Adapter<RecyclerView
         return this.itemList.size();
     }
 
-}
 
-class RecyclerViewHolders extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class PlaylistViewHolder extends ViewHolder {
 
-    public TextView playlistTitle;
-    public TextView playlistAuthor;
-    public ImageView playlistImage;
+        private final TextView playlistTitle;
+        private final TextView playlistAuthor;
+        private final ImageView playlistImage;
 
-    public RecyclerViewHolders(View itemView) {
-        super(itemView);
-        itemView.setOnClickListener(this);
-        playlistTitle = (TextView) itemView.findViewById(R.id.playlist_gridItemTitle);
-        playlistAuthor = (TextView) itemView.findViewById(R.id.playlist_gridItemAuthor);
-        playlistImage = (ImageView) itemView.findViewById(R.id.playlist_gridItemImage);
-    }
+        PlaylistViewHolder(View itemView) {
+            super(itemView);
+            playlistTitle = (TextView) itemView.findViewById(R.id.playlist_gridItemTitle);
+            playlistAuthor = (TextView) itemView.findViewById(R.id.playlist_gridItemAuthor);
+            playlistImage = (ImageView) itemView.findViewById(R.id.playlist_gridItemImage);
 
-    @Override
-    public void onClick(View view) {
-        Toast.makeText(view.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+            itemView.setOnClickListener(v -> {
+                Toast.makeText(v.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        void bind(Playlist playlist ) {
+            playlistAuthor.setText(playlist.getAuthor());
+            playlistTitle.setText(playlist.getTitle());
+            playlistImage.setImageResource(playlist.getId());
+            /*String url;
+            url = playlist.getImage();
+
+            Glide.with(playlistImage.getContext())
+                    .load(url)
+                    .placeholder(R.drawable.record_background)
+                    .centerCrop()
+                    .into(playlistImage);*/
+        }
     }
 }

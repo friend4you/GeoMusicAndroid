@@ -19,9 +19,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable"/>
+
         </activity>
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
@@ -39,6 +37,9 @@
             </intent-filter>
 
         </activity>
+        <activity android:name=".AccountManager" android:screenOrientation="portrait"/>
+        <activity android:name=".ChangePassword" android:screenOrientation="portrait"/>
+        <activity android:name=".SelectCategory" android:screenOrientation="portrait"/>
         <activity
             android:name=".MediaPlayer"
             android:screenOrientation="portrait">
@@ -46,8 +47,7 @@
         </activity>
         <activity
             android:name=".Settings"
-            android:screenOrientation="portrait"
-            ></activity>
+            android:screenOrientation="portrait"/>
 
         <service
             android:name=".MusicService"

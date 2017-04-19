@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#8c8c8c</color>
-    <color name="colorAccent">#dd7254</color>
+    <color name="colorAccent">#ff8462</color>
+    <color name="colorAccentDark">#c96347</color>
     <color name="colorNavbar">#FFFFFF</color>
 </resources>
