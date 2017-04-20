@@ -67,11 +67,11 @@ public class CategoryRecyclerAdapter extends Adapter<ViewHolder> {
             title.setText(category.getName());
             image.setImageResource(category.getId());
             /*String url;
-            url = category.getImage();
+            url = category.getImage();*/
             Glide.with(image.getContext())
-                    .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(image);*/
+                    .load(category.getId())
+                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(image);
 
             itemView.setOnClickListener(v -> {
 

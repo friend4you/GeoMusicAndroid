@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -71,6 +72,7 @@ public class MainActivity extends AppCompatActivity
     private int lastRecordId;
     private ImageView userImage;
     private TextView userName;
+    private FloatingActionButton fab;
 
     //final ActionBar actionBar = getActionBar();
     final static String BROADCAST_ACTION = "BROADCAST_ACTION";
@@ -98,6 +100,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
         });
         recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -247,18 +250,22 @@ public class MainActivity extends AppCompatActivity
     private void openSubscribed() {
         navigationView.setCheckedItem(R.id.nav_subscribed);
         getSupportActionBar().setTitle("Subscibed");
+        fab.setVisibility(VISIBLE);
         replaceFragment(new SubscribedFragment());
     }
 
     private void openFavourites() {
         navigationView.setCheckedItem(R.id.nav_favorites);
         getSupportActionBar().setTitle("Favorites");
+        fab.setVisibility(VISIBLE);
         replaceFragment(new FavouritesFragment());
     }
 
     private void openPlayList() {
         navigationView.setCheckedItem(R.id.nav_playlists);
         getSupportActionBar().setTitle("Playlists");
+        fab.setVisibility(GONE);
+
         replaceFragment(new PlaylistsFragment());
     }
 

@@ -76,11 +76,12 @@ public class TrendingRecyclerAdapter extends Adapter<ViewHolder> {
         void bind(Playlist playlist) {
             title.setText(playlist.getTitle());
             description.setText(playlist.getDescription());
-            String url;
-            url = playlist.getImage();
+            image.setImageResource(playlist.getId());
+            /*String url;
+            url = playlist.getImage();*/
             Glide.with(image.getContext())
-                    .load(url)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(playlist.getId())
+                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(image);
             addButton.setImageResource(R.drawable.ic_add_circle_outline_black_48dp);
 

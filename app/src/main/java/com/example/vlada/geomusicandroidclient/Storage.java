@@ -141,96 +141,115 @@ public class Storage {
         c.setName("Acoustic");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8c0008");
         c.setId(R.drawable.blues);
         c.setName("Blues");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#3f583e");
         c.setId(R.drawable.clasical);
         c.setName("Clasical");
         categories.add(c);
 
+        c = new Category();
         c.setColor("##2f4f4f");
         c.setId(R.drawable.country);
         c.setName("Country");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#483d8b");
         c.setId(R.drawable.disco);
         c.setName("Disco");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#68228b");
         c.setId(R.drawable.edm);
         c.setName("Eelctro");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#556b2f");
         c.setId(R.drawable.eighties);
         c.setName("80's");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#458b00");
         c.setId(R.drawable.hip_hop);
         c.setName("Hip-Hop");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#458b74");
         c.setId(R.drawable.indie);
         c.setName("Indie");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8b864e");
         c.setId(R.drawable.jazz);
         c.setName("Jazz");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8b8970");
         c.setId(R.drawable.k_pop);
         c.setName("K-pop");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#68838b");
         c.setId(R.drawable.latin);
         c.setName("Latin");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8b5f65");
         c.setId(R.drawable.metal);
         c.setName("Metal");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#5d478b");
         c.setId(R.drawable.nineth);
         c.setName("90's");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#191970");
         c.setId(R.drawable.pop);
         c.setName("Pop");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8b5a00");
         c.setId(R.drawable.punk);
         c.setName("Punk");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8b2500");
         c.setId(R.drawable.rb);
         c.setName("R&B");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#8b4789");
         c.setId(R.drawable.reggae);
         c.setName("Reggae");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#548b54");
         c.setId(R.drawable.rock);
         c.setName("Rock");
         categories.add(c);
 
+        c = new Category();
         c.setColor("#668b8b");
         c.setId(R.drawable.vocal);
         c.setName("Vocal");

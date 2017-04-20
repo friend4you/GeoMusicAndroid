@@ -39,6 +39,7 @@
         android:layout_marginBottom="81dp"
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
+        android:visibility="visible"
         app:srcCompat="@drawable/ic_add_black_48dp" />
 
 
@@ -61,7 +62,8 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:layout_margin="4dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="10dp"
                 app:srcCompat="@drawable/retro" />
 
             <LinearLayout
@@ -81,7 +83,7 @@
                     android:layout_weight="1"
                     android:text="Twenty One Pilots"
                     android:textColor="@color/vk_white"
-                    android:textSize="18sp" />
+                    android:textSize="17sp" />
 
                 <TextView
                     android:id="@+id/record_title_selected"
@@ -90,7 +92,7 @@
                     android:layout_weight="1"
                     android:text="Stressed Out"
                     android:textColor="@color/vk_white"
-                    android:textSize="16sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
         </LinearLayout>
