@@ -3,6 +3,7 @@ package com.example.vlada.geomusicandroidclient.api;
 import com.example.vlada.geomusicandroidclient.api.model.Category;
 import com.example.vlada.geomusicandroidclient.api.model.LoginResponse;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
+import com.example.vlada.geomusicandroidclient.api.model.Record;
 import com.example.vlada.geomusicandroidclient.api.model.RegistrationResponse;
 
 import java.util.List;
@@ -22,7 +23,7 @@ import retrofit2.http.Query;
 public interface Api {
 
     @Headers("Content-Type: application/json")
-    @GET("Account/JsonLogin")
+    @POST("Account/JsonLogin")
     Call<LoginResponse> getUserJson(@Query("email") String email, @Query("password") String password);
 
     @FormUrlEncoded
@@ -49,4 +50,11 @@ public interface Api {
     @Headers("Content-Type: application/json")
     @GET("api/getcategories")
     Call<List<Category>> getCategories();
+
+    @Headers("Content-Type: application/json")
+    @POST("api/GetNearRecords")
+    Call<List<Record>> getNearRecords(@Query("latitude") Double latitude, @Query("longitude") Double longitude);
+
+    /*@Headers("Content-Type: application/json")
+    @POST("api/")*/
 }

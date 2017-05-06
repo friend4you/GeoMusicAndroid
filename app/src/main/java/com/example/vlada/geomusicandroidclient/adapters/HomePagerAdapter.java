@@ -64,7 +64,6 @@ public class HomePagerAdapter extends PagerAdapter {
             case CATEGORIES:
                 view = inflater.inflate(R.layout.categories, collection, false);
                 object = new CategoryController(view);
-
                 break;
         }
         view.setTag(object);

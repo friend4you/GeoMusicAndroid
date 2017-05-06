@@ -65,12 +65,12 @@ public class CategoryRecyclerAdapter extends Adapter<ViewHolder> {
 
         void bind(Category category) {
             title.setText(category.getName());
-            image.setImageResource(category.getId());
-            /*String url;
-            url = category.getImage();*/
+            //image.setImageResource(category.getId());
+            String url;
+            url = "https://geomusic.blob.core.windows.net/" + category.getImage();
             Glide.with(image.getContext())
-                    .load(category.getId())
-                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .load(url)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(image);
 
             itemView.setOnClickListener(v -> {

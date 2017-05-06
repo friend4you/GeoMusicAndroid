@@ -1,8 +1,7 @@
 package com.example.vlada.geomusicandroidclient.api.model;
 
 
-import com.example.vlada.geomusicandroidclient.api.model.Category;
-import com.example.vlada.geomusicandroidclient.models.*;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.HashMap;
 import java.util.List;
@@ -10,61 +9,68 @@ import java.util.Map;
 
 public class Playlist {
 
-    private Category Category;
-    private List<Record> Records = null;
-    private String Image;
-    private String Title;
-    private String Description;
-    private String Author;
+    @SerializedName("Category")
+    private Category category;
+    @SerializedName("Records")
+    private List<Record> records = null;
+    @SerializedName("Image")
+    private String image;
+    @SerializedName("Title")
+    private String title;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("Author")
+    private String author;
+    @SerializedName("id")
     private Integer id;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Category getCategory() {
-        return Category;
+        return category;
     }
 
     public void setCategory(Category category) {
-        this.Category = category;
+        this.category = category;
     }
 
     public List<Record> getRecords() {
-        return Records;
+        return records;
     }
 
     public void setRecords(List<Record> records) {
-        this.Records = records;
+        this.records = records;
     }
 
     public String getImage() {
-        return Image;
+        return image;
     }
 
     public void setImage(String image) {
-        this.Image = image;
+        this.image = image;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        this.Title = title;
+        this.title = title;
     }
 
     public String getDescription() {
-        return Description;
+        return description;
     }
 
     public void setDescription(String description) {
-        this.Description = description;
+        this.description = description;
     }
 
     public String getAuthor() {
-        return Author;
+        return author;
     }
 
     public void setAuthor(String author) {
-        this.Author = author;
+        this.author = author;
     }
 
     public Integer getId() {

@@ -1,62 +1,42 @@
 package com.example.vlada.geomusicandroidclient.api.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class Record {
 
-
-    private Integer id;
-    private Integer ownerId;
-    private String artist;
+    @SerializedName("Title")
     private String title;
-    private Integer duration;
-    private Integer date;
+    @SerializedName("Artist")
+    private String artist;
+    @SerializedName("Description")
+    private String description;
+    @SerializedName("AddDate")
+    private String addDate;
+    @SerializedName("Url")
     private String url;
-    private Integer genreId;
-
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    private String path;
-
-    public Record(Integer id, String artist, String title, String path){
-        setId(id);
-        setArtist(artist);
-        setTitle(title);
-        setPath(path);
-    }
-
-    public Integer getLyricsId() {
-        return lyricsId;
-    }
-
-    public void setLyricsId(Integer lyricsId) {
-        this.lyricsId = lyricsId;
-    }
-
-    private Integer lyricsId;
+    @SerializedName("Duration")
+    private Integer duration;
+    @SerializedName("Lat")
+    private Integer lat;
+    @SerializedName("Long")
+    private Integer lng;
+    @SerializedName("Image")
+    private Object image;
+    @SerializedName("id")
+    private Integer id;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public Integer getId() {
-        return id;
+    public String getTitle() {
+        return title;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public Integer getOwnerId() {
-        return ownerId;
-    }
-
-    public void setOwnerId(Integer ownerId) {
-        this.ownerId = ownerId;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getArtist() {
@@ -67,28 +47,20 @@ public class Record {
         this.artist = artist;
     }
 
-    public String getTitle() {
-        return title;
+    public String getDescription() {
+        return description;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public Integer getDuration() {
-        return duration;
+    public String getAddDate() {
+        return addDate;
     }
 
-    public void setDuration(Integer duration) {
-        this.duration = duration;
-    }
-
-    public Integer getDate() {
-        return date;
-    }
-
-    public void setDate(Integer date) {
-        this.date = date;
+    public void setAddDate(String addDate) {
+        this.addDate = addDate;
     }
 
     public String getUrl() {
@@ -99,12 +71,44 @@ public class Record {
         this.url = url;
     }
 
-    public Integer getGenreId() {
-        return genreId;
+    public Integer getDuration() {
+        return duration;
     }
 
-    public void setGenreId(Integer genreId) {
-        this.genreId = genreId;
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
+    public Integer getLat() {
+        return lat;
+    }
+
+    public void setLat(Integer lat) {
+        this.lat = lat;
+    }
+
+    public Integer getLong() {
+        return lng;
+    }
+
+    public void setLong(Integer _long) {
+        this.lng = _long;
+    }
+
+    public Object getImage() {
+        return image;
+    }
+
+    public void setImage(Object image) {
+        this.image = image;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Map<String, Object> getAdditionalProperties() {
@@ -115,21 +119,4 @@ public class Record {
         this.additionalProperties.put(name, value);
     }
 
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Record record = (Record) o;
-
-        if (!id.equals(record.id)) return false;
-        return additionalProperties != null ? additionalProperties.equals(record.additionalProperties) : record.additionalProperties == null;
-
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
-    }
 }

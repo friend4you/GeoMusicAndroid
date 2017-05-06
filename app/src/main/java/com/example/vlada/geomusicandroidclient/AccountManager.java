@@ -1,10 +1,14 @@
 package com.example.vlada.geomusicandroidclient;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -13,6 +17,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
+import java.io.File;
 
 public class AccountManager extends AppCompatActivity {
 
@@ -22,7 +29,13 @@ public class AccountManager extends AppCompatActivity {
     private EditText userName;
     private EditText email;
     private ImageView userImage;
+    private Uri mImageCaptureUri;
 
+    private final int REQUEST_CROP_ICON = 10;
+    private final int REQUEST_TAKEN_IMAGE = 11;
+    private final int CAMERA_TYPE = 12;
+    private final int GALLERY_TYPE = 13;
+    private final int PERMISSION_EXTERNAL_STORAGE = 22;
 
 
     @Override
@@ -30,7 +43,15 @@ public class AccountManager extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_manager);
 
-        userImage = (ImageView) findViewById(R.id.account_userImage);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.appBarLayout);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Account manager");
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
+
+        userImage = (ImageView) findViewById(R.id.linearLayout3);
         registerForContextMenu(userImage);
         userName = (EditText) findViewById(R.id.account_userName);
         userName.setText(Application.getSharedInstance().getStorage().getUserNickname());
@@ -49,7 +70,6 @@ public class AccountManager extends AppCompatActivity {
             Intent intent = new Intent(AccountManager.this, SelectCategory.class);
             startActivity(intent);
         });
-
     }
 
     @Override
@@ -64,13 +84,14 @@ public class AccountManager extends AppCompatActivity {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
             case R.id.selectFromGalary:
-                Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                startActivityForResult(pickPhoto, 1);
+                Intent pickImageGallery = new Intent(AccountManager.this, PickImageActivity.class);
+                pickImageGallery.putExtra("SELECT_TYPE", GALLERY_TYPE);
+                startActivityForResult(pickImageGallery, REQUEST_TAKEN_IMAGE);
                 break;
             case R.id.selectFromCamera:
-                Intent takePicture = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(takePicture, 0);
+                Intent pickImageCamera = new Intent(AccountManager.this, PickImageActivity.class);
+                pickImageCamera.putExtra("SELECT_TYPE", CAMERA_TYPE);
+                startActivityForResult(pickImageCamera, REQUEST_TAKEN_IMAGE);
                 break;
         }
         return super.onContextItemSelected(item);
@@ -79,16 +100,60 @@ public class AccountManager extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode){
-            case 0: // camera
-                if(resultCode == RESULT_OK){
+        if (resultCode != RESULT_OK) {
+            return;
+        }
 
-                }
+        switch (requestCode) {
+
+            case REQUEST_TAKEN_IMAGE:
+                String picturePath = data.getStringExtra("picturePath");
+                //perform Crop on the Image Selected from Gallery
+                performCrop(picturePath);
+
                 break;
-            case 1: // galary
-                if(resultCode ==RESULT_OK){
+            case REQUEST_CROP_ICON:
+                Bundle extras = data.getExtras();
+                Bitmap selectedBitmap = extras.getParcelable("data");
+                // Set The Bitmap Data To ImageView
+                userImage.setImageBitmap(selectedBitmap);
+                break;
+        }
 
-                }
+
+    }
+
+    private void performCrop(String picUri) {
+        try {
+            //Start Crop Activity
+
+            Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            // indicate image type and Uri
+            File f = new File(picUri);
+            Uri contentUri = FileProvider.getUriForFile(AccountManager.this, "com.example.vlada.geomusicandroidclient.fileprovider", f);
+
+            cropIntent.setDataAndType(contentUri, "image/*");
+            // set crop properties
+            cropIntent.putExtra("crop", "true");
+            // indicate aspect of desired crop
+            cropIntent.putExtra("aspectX", 1);
+            cropIntent.putExtra("aspectY", 1);
+            // indicate output X and Y
+            cropIntent.putExtra("outputX", 280);
+            cropIntent.putExtra("outputY", 280);
+
+            // retrieve data on return
+            cropIntent.putExtra("return-data", true);
+            // start the activity - we handle returning in onActivityResult
+            startActivityForResult(cropIntent, REQUEST_CROP_ICON);
+        }
+        // respond to users whose devices do not support the crop action
+        catch (ActivityNotFoundException error) {
+            // display an error message
+            String errorMessage = "your device doesn't support the crop action!";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
     }
+
 }

@@ -1,7 +1,7 @@
 package com.example.vlada.geomusicandroidclient.adapters;
 
 
-import android.support.v7.widget.RecyclerView;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
 import android.view.LayoutInflater;
@@ -9,9 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
+import com.example.vlada.geomusicandroidclient.PlaylistCoordinatorActivity;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
@@ -40,7 +39,7 @@ public class SubscribedRecyclerAdapter extends Adapter<ViewHolder> {
 
     @Override
     public PlaylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_griditem, parent, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlist_grid, parent, false);
         return new PlaylistViewHolder(layoutView);
     }
 
@@ -69,7 +68,9 @@ public class SubscribedRecyclerAdapter extends Adapter<ViewHolder> {
             playlistImage = (ImageView) itemView.findViewById(R.id.playlist_gridItemImage);
 
             itemView.setOnClickListener(v -> {
-                Toast.makeText(v.getContext(), "Clicked Country Position = " + getPosition(), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(itemView.getContext(), PlaylistCoordinatorActivity.class);
+                intent.putExtra("Title", playlistTitle.getText());
+                itemView.getContext().startActivity(intent);
             });
         }
 

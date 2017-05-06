@@ -3,6 +3,7 @@ package com.example.vlada.geomusicandroidclient.api;
 import com.example.vlada.geomusicandroidclient.Application;
 import com.example.vlada.geomusicandroidclient.api.model.Category;
 import com.example.vlada.geomusicandroidclient.api.model.LoginResponse;
+import com.example.vlada.geomusicandroidclient.api.model.Record;
 import com.example.vlada.geomusicandroidclient.api.model.RegistrationResponse;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 import com.readystatesoftware.chuck.ChuckInterceptor;
@@ -23,7 +24,8 @@ public class GeomusicService {
                 .addInterceptor(new ChuckInterceptor(Application.getSharedInstance().getApplicationContext()))
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://geomusic.azurewebsites.net/")
+                .baseUrl("http://www.geomusic.somee.com/")
+                //.baseUrl("http://geomusic.azurewebsites.net/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
@@ -45,6 +47,11 @@ public class GeomusicService {
     }
     public Observable<List<Category>> getCategories(){
         Call<List<Category>> call = api.getCategories();
+        return Observable.fromCallable(() -> call.execute().body());
+    }
+
+    public Observable<List<Record>> getNearRecords(Double latitude, Double longitude){
+        Call<List<Record>> call = api.getNearRecords(latitude, longitude);
         return Observable.fromCallable(() -> call.execute().body());
     }
 }

@@ -14,6 +14,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.api.model.Category;
+import com.example.vlada.geomusicandroidclient.events.SelectCategoriesEvent;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +40,7 @@ public class SelectCategoriesAdapter extends Adapter<ViewHolder> {
 
     @Override
     public CategoryViewHolders onCreateViewHolder(ViewGroup parent, int viewType) {
-        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.selectcategory_fragment_item, parent, false);
+        View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_selectcategory_fragment, parent, false);
         return new CategoryViewHolders(layoutView);
 
     }
@@ -78,7 +81,7 @@ public class SelectCategoriesAdapter extends Adapter<ViewHolder> {
                 title.setTextColor(Color.BLACK);
             }
             String url;
-            url = category.getImage();
+            url = "https://geomusic.blob.core.windows.net/" + category.getImage();
             Glide.with(image.getContext())
                     .load(url)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -91,7 +94,9 @@ public class SelectCategoriesAdapter extends Adapter<ViewHolder> {
                 } else {
                     selectedItems.add(category);
                 }
+                EventBus.getDefault().post(new SelectCategoriesEvent(selectedItems));
                 notifyItemChanged(items.indexOf(category));
+
             });
         }
     }

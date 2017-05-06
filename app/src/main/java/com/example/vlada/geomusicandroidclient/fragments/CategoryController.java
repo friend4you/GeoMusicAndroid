@@ -42,12 +42,13 @@ public class CategoryController {
 
         recycler.setAdapter(adapter);
 
-        categories = Application.getSharedInstance().getStorage().getCategories();
+        //categories = Application.getSharedInstance().getStorage().getCategories();
         if(categories == null){
             categories = new ArrayList<>();
         }
 
-        adapter.add(categories);
+        //adapter.add(categories);
+        fetchData();
 
     }
 

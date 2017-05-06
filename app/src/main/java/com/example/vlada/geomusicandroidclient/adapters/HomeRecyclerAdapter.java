@@ -10,15 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.vlada.geomusicandroidclient.Application;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.api.model.CategoryPlaylists;
-import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 public class HomeRecyclerAdapter extends Adapter<ViewHolder> {
@@ -45,7 +42,7 @@ public class HomeRecyclerAdapter extends Adapter<ViewHolder> {
             View headerRow = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlist_slider, parent, false);
             return new MyHeaderViewHolder(headerRow);
         }else{
-            View normalView = LayoutInflater.from(parent.getContext()).inflate(R.layout.playlists_category_griditem, parent, false);
+            View normalView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_playlists_category_grid, parent, false);
             return new MyNormalViewHolder(normalView);
         }
     }

@@ -1,8 +1,5 @@
 package com.example.vlada.geomusicandroidclient;
 
-import android.app.ActionBar;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -14,19 +11,16 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.ActionBarContainer;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,22 +28,17 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.example.vlada.geomusicandroidclient.adapters.HomePagerAdapter;
 import com.example.vlada.geomusicandroidclient.api.model.Record;
 import com.example.vlada.geomusicandroidclient.events.PlayRecordEvent;
 import com.example.vlada.geomusicandroidclient.events.ShowRecordTitleEvent;
 import com.example.vlada.geomusicandroidclient.fragments.FavouritesFragment;
 import com.example.vlada.geomusicandroidclient.fragments.NearyouFragment;
 import com.example.vlada.geomusicandroidclient.fragments.PlaylistsFragment;
-import com.example.vlada.geomusicandroidclient.fragments.SearchFragment;
 import com.example.vlada.geomusicandroidclient.fragments.SubscribedFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
@@ -73,6 +62,7 @@ public class MainActivity extends AppCompatActivity
     private ImageView userImage;
     private TextView userName;
     private FloatingActionButton fab;
+    private Button manageButton;
 
     //final ActionBar actionBar = getActionBar();
     final static String BROADCAST_ACTION = "BROADCAST_ACTION";
@@ -118,6 +108,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setBackgroundColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
 
+
         container = (FrameLayout) findViewById(R.id.container);
         openPlayList();
 
@@ -145,6 +136,12 @@ public class MainActivity extends AppCompatActivity
         userName = (TextView) headerView.findViewById(R.id.navbar_userName);
         userName.setText(Application.getSharedInstance().getStorage().getUserNickname());
 
+        manageButton = (Button) headerView.findViewById(R.id.navbar_manageButton);
+        manageButton.setOnClickListener(c -> {
+            Intent intent = new Intent(MainActivity.this, PlaylistManager.class);
+            startActivity(intent);
+        });
+
         openPlayList();
 
     }
@@ -164,7 +161,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
+        inflater.inflate(R.menu.nearyou_menu, menu);
         return true;
     }
 
@@ -204,17 +201,11 @@ public class MainActivity extends AppCompatActivity
             case R.id.nav_subscribed:
                 openSubscribed();
                 break;
-            case R.id.nav_settings:
-                openSettings();
-                break;
             case R.id.nav_nearyou:
                 openNearYou();
                 break;
-            case R.id.nav_search:
-                openSearch();
-                break;
-            case R.id.nav_logout:
-                logout();
+            case R.id.nav_settings:
+                openSettings();
                 break;
         }
 
@@ -229,12 +220,12 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
-    private void openSearch() {
+   /* private void openSearch() {
         navigationView.setCheckedItem(R.id.nav_search);
         getSupportActionBar().setTitle("Search");
         replaceFragment(new SearchFragment());
 
-    }
+    }*/
 
     private void openNearYou() {
         navigationView.setCheckedItem(R.id.nav_nearyou);
@@ -250,14 +241,14 @@ public class MainActivity extends AppCompatActivity
     private void openSubscribed() {
         navigationView.setCheckedItem(R.id.nav_subscribed);
         getSupportActionBar().setTitle("Subscibed");
-        fab.setVisibility(VISIBLE);
+        fab.setVisibility(GONE);
         replaceFragment(new SubscribedFragment());
     }
 
     private void openFavourites() {
         navigationView.setCheckedItem(R.id.nav_favorites);
         getSupportActionBar().setTitle("Favorites");
-        fab.setVisibility(VISIBLE);
+        fab.setVisibility(GONE);
         replaceFragment(new FavouritesFragment());
     }
 

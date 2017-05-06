@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.vlada.geomusicandroidclient.Application;
 import com.example.vlada.geomusicandroidclient.MainActivity;
 import com.example.vlada.geomusicandroidclient.R;
+import com.example.vlada.geomusicandroidclient.SelectCategory;
 import com.example.vlada.geomusicandroidclient.api.ServiceGenerator;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -61,6 +62,10 @@ public class LoginFragment extends Fragment {
                                     Log.d("response", loginResponse.getUser().getEmail());
                                     Application.getSharedInstance().getStorage().setLogin(true);
                                     Application.getSharedInstance().getStorage().saveUserInfo(loginResponse.getUser());
+                                    if(loginResponse.getUser().getCategories() == null){
+                                        Intent intent = new Intent(getActivity(), SelectCategory.class);
+                                        startActivity(intent);
+                                    }
                                     Intent intent = new Intent(getActivity(), MainActivity.class);
                                     startActivity(intent);
                                     getActivity().finish();

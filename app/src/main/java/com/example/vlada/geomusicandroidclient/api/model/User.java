@@ -7,7 +7,7 @@ import java.util.List;
 public class User {
 
     @SerializedName("Categories")
-    private List<Object> categories = null;
+    private List<Category> categories = null;
     @SerializedName("Claims")
     private List<Object> claims = null;
     @SerializedName("Favorites")
@@ -51,7 +51,7 @@ public class User {
     @SerializedName("UserName")
     private String userName;
 
-    public List<Object> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 

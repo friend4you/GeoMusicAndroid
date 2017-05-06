@@ -1,5 +1,6 @@
 package com.example.vlada.geomusicandroidclient.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.RecyclerView.ViewHolder;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.example.vlada.geomusicandroidclient.PlaylistCoordinatorActivity;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.api.model.Category;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
@@ -87,6 +89,8 @@ public class TrendingRecyclerAdapter extends Adapter<ViewHolder> {
 
             itemView.setOnClickListener(v -> {
 
+                Intent intent = new Intent(itemView.getContext(), PlaylistCoordinatorActivity.class);
+                itemView.getContext().startActivity(intent);
             });
         }
     }

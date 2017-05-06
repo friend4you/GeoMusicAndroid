@@ -1,5 +1,6 @@
 package com.example.vlada.geomusicandroidclient.fragments;
 
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
@@ -28,6 +29,7 @@ public class HomeController {
 
     public HomeController(View view) {
         recycler = (RecyclerView) view.findViewById(R.id.featured_recycler);
+        recycler.setLayoutManager(new LinearLayoutManager(view.getContext()));
         if (adapter == null) {
             adapter = new HomeRecyclerAdapter();
         }

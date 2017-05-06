@@ -1,6 +1,7 @@
 package com.example.vlada.geomusicandroidclient.adapters;
 
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Parcelable;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.vlada.geomusicandroidclient.PlaylistCoordinatorActivity;
 import com.example.vlada.geomusicandroidclient.R;
 import com.example.vlada.geomusicandroidclient.api.model.Playlist;
 
@@ -48,25 +50,29 @@ public class PlaylistsSliderAdapter extends PagerAdapter {
 
 
         final LayoutInflater inflater = LayoutInflater.from(collection.getContext());
-        View view = null;
-        Object object = null;
+
         View imageLayout = inflater.inflate(R.layout.item_palylist_slider, collection, false);
-        ImageView image = (ImageView) view.findViewById(R.id.itemSliderImage);
-        TextView title = (TextView) view.findViewById(R.id.itemSliderTitle);
-        TextView desc = (TextView) view.findViewById(R.id.itemSliderDesc);
-        ImageView background = (ImageView) view.findViewById(R.id.sliderBackground);
+        ImageView image = (ImageView) imageLayout.findViewById(R.id.itemSliderImage);
+        TextView title = (TextView) imageLayout.findViewById(R.id.itemSliderTitle);
+        TextView desc = (TextView) imageLayout.findViewById(R.id.itemSliderDesc);
+        ImageView background = (ImageView) imageLayout.findViewById(R.id.sliderBackground);
 
         Playlist p = playlists.get(position);
         image.setImageResource(p.getId());
         title.setText(p.getTitle());
         desc.setText(p.getDescription());
-        Bitmap bm = BitmapFactory.decodeResource(view.getResources(), p.getId());
-        Blurry.with(view.getContext()).radius(10).sampling(8).async().from(bm).into(background);
+        Bitmap bm = BitmapFactory.decodeResource(imageLayout.getResources(), p.getId());
+        Blurry.with(imageLayout.getContext()).radius(10).sampling(8).async().from(bm).into(background);
+
+        imageLayout.setOnClickListener(c -> {
+            Intent intent = new Intent(imageLayout.getContext(), PlaylistCoordinatorActivity.class);
+            imageLayout.getContext().startActivity(intent);
+        });
 
 
-        collection.addView(view, 0);
+        collection.addView(imageLayout, 0);
 
-        return view;
+        return imageLayout;
     }
 
     @Override

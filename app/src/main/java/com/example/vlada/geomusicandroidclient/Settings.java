@@ -2,47 +2,46 @@ package com.example.vlada.geomusicandroidclient;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 
-/**
- * Created by vlada on 09.02.2017.
- */
+import com.example.vlada.geomusicandroidclient.adapters.CategoryRecyclerAdapter;
+import com.example.vlada.geomusicandroidclient.api.model.Category;
 
-public class Settings extends Activity {
+import java.util.List;
+
+public class Settings extends AppCompatActivity {
+
+    private RecyclerView recycler;
+    private Toolbar toolbar;
+    private CategoryRecyclerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_main);
 
+        recycler = (RecyclerView) findViewById(R.id.settingsRecycler);
+        recycler.setLayoutManager(new LinearLayoutManager(this));
+
+        if(adapter == null){
+            adapter = new CategoryRecyclerAdapter();
+        }
+        recycler.setAdapter(adapter);
+        List<Category> categoryList = Application.getSharedInstance().getStorage().getSettingsCategories();
+        adapter.add(categoryList);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Settings");
+        toolbar.setNavigationOnClickListener(v -> {
+            finish();
+        });
 
     }
 
-    public static String getEmail() {
-        return email;
-    }
 
-    public static void setEmail(String email) {
-        Settings.email = email;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
-    public static void setPassword(String password) {
-        Settings.password = password;
-    }
-
-    public static Boolean getAuthorized() {
-        return authorized;
-    }
-
-    public static void setAuthorized(Boolean authorized) {
-        Settings.authorized = authorized;
-    }
-
-    private static String email;
-    private static String password;
-
-    private static Boolean authorized;
 }
