@@ -84,7 +84,9 @@ public class SearchFragment extends Fragment {
         } else {
 
             lastRecordId = Application.getSharedInstance().getStorage().getLastRecordId();
-            getRecords();
+            //getRecords();
+            recordList = Application.getSharedInstance().getStorage().getRecords();
+
             if (lastRecordId != -1 && currentRecord != null) {
 
                 MusicService.activeRecord = currentRecord;
@@ -101,15 +103,7 @@ public class SearchFragment extends Fragment {
         String where = MediaStore.Audio.AudioColumns.IS_MUSIC + " <> 0";
         Cursor cursor = getActivity().getContentResolver().query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, columns, where, null, null);
 
-        while (cursor.moveToNext()) {
-            Record n = new Record(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
-            if(n.getId() == lastRecordId){
-                currentRecord = n;
-            }
-            recordList.add(n);
-        }
-        Record UrlRecord = new Record(1, "Kaleo", "Way down we go", "https://geomusicstorage.blob.core.windows.net/images/Kaleo%20-%20Way%20Down%20We%20Go(Ost%20Logan).mp3");
-        recordList.add(UrlRecord);
+
 
     }
 }

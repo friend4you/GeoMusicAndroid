@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="134dp"
+    android:orientation="vertical"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
+
+    <ImageView
+        android:id="@+id/sliderBackground"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/study" />
+
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#555"
+        android:alpha="0.4"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="@+id/sliderBackground"
+        app:layout_constraintRight_toRightOf="@+id/sliderBackground"
+        app:layout_constraintTop_toTopOf="@+id/sliderBackground">
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/itemSliderImage"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/city" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="110dp"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="110dp" />
+
+    <TextView
+        android:id="@+id/itemSliderTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="Title"
+        android:textColor="@android:color/white"
+
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="@+id/itemSliderImage"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2" />
+
+    <TextView
+        android:id="@+id/itemSliderDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:text="Description"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="@+id/guideline2"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/itemSliderTitle"
+        app:layout_constraintBottom_toBottomOf="@+id/itemSliderImage"
+        app:layout_constraintVertical_bias="0.473"
+        android:layout_marginEnd="16dp" />
+
+</android.support.constraint.ConstraintLayout>

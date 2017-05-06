@@ -121,10 +121,10 @@ public class MusicService extends Service {
         if (!activeRecord.equals(pausedRecord)) {
             mediaPlayer.reset();
             try {
-                mediaPlayer.setDataSource(activeRecord.getPath());
+                mediaPlayer.setDataSource(activeRecord.getUrl());
                 mediaPlayer.prepare();
             } catch (IOException e) {
-                Log.e(TAG, "play: " + activeRecord.getPath(), e);
+                Log.e(TAG, "play: " + activeRecord.getUrl(), e);
             }
             mediaPlayer.start();
         } else {

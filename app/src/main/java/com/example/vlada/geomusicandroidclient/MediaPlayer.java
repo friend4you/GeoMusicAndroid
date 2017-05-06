@@ -53,8 +53,10 @@ public class MediaPlayer extends Activity {
     private void updateSeekBar(Intent serviceIntent) {
         int seekProgress = Integer.parseInt(serviceIntent.getStringExtra("current"));
         seekMax = Integer.parseInt(serviceIntent.getStringExtra("mediamax"));
+        seekMax = 195000;
         timeLine.setMax(seekMax);
         timeLine.setProgress(seekProgress);
+
 
         currentTime.setText(String.format("%02d:%02d:%02d",
                 TimeUnit.MILLISECONDS.toHours(seekProgress),
@@ -84,7 +86,15 @@ public class MediaPlayer extends Activity {
         timeLine = (SeekBar) findViewById(R.id.record_play_timeLine);
         playPause = (ImageView) findViewById(R.id.record_play_playPause);
         recordImage = (ImageView) findViewById(R.id.record_play_recordImage);
+        recordImage.setImageResource(R.drawable.retro);
 
+        seekMax = 195000;
+        duration.setText(" / " + String.format("%02d:%02d:%02d",
+                TimeUnit.MILLISECONDS.toHours(seekMax),
+                TimeUnit.MILLISECONDS.toMinutes(seekMax) -
+                        TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(seekMax)), // The change is in this line
+                TimeUnit.MILLISECONDS.toSeconds(seekMax) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(seekMax))));
         playPause.setOnClickListener(v -> PlayPause(v));
 
         if (MusicService.mediaPlayer != null) {
@@ -101,7 +111,7 @@ public class MediaPlayer extends Activity {
         } else {
             playPause.setImageResource(R.drawable.ic_play_circle_outline_white_48dp);
         }
-        String artistTitleText = currentRecord.getArtist() + " - " + currentRecord.getTitle();
+        String artistTitleText = "Twenty One Pilots - Stressed Out"; //currentRecord.getArtist() + " - " + currentRecord.getTitle();
         if (artistTitleText.length() > 35) {
             artistTitle.setText(artistTitleText.substring(0, 35) + "...");
         } else {

@@ -6,6 +6,9 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
 
     <application
         android:name=".Application"
@@ -19,14 +22,7 @@
             android:name=".MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
+
         </activity>
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
@@ -35,19 +31,47 @@
             android:screenOrientation="portrait"
             android:theme="@style/VK.Transparent" />
         <activity
-            android:name="LoginActivity"
+            android:name=".SplashActivity"
             android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
 
         </activity>
         <activity
+            android:name=".AccountManager"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".PickImageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".PlaylistManager"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ChangePassword"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SelectCategory"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".MediaPlayer"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" />
 
-        </activity>
+        <activity
+            android:name=".PlaylistCoordinatorActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".Settings"
             android:screenOrientation="portrait"
-            ></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name=".MusicService"
@@ -58,6 +82,20 @@
                 <action android:name="com.example.vladarsenyuk.mediaplayer.action.PAUSE" />
             </intent-filter>
         </service>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.vlada.geomusicandroidclient.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/filepaths" />
+        </provider>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCRwwiR9rSQWWq07Idpgw8pe3r47bFOGPY" />
     </application>
 
 </manifest>

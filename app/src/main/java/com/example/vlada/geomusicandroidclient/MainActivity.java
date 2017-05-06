@@ -1,51 +1,49 @@
 package com.example.vlada.geomusicandroidclient;
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.SearchView;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.example.vlada.geomusicandroidclient.api.model.Record;
 import com.example.vlada.geomusicandroidclient.events.PlayRecordEvent;
 import com.example.vlada.geomusicandroidclient.events.ShowRecordTitleEvent;
-import com.example.vlada.geomusicandroidclient.fragments.SearchFragment;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKCallback;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.api.VKError;
+import com.example.vlada.geomusicandroidclient.fragments.FavouritesFragment;
+import com.example.vlada.geomusicandroidclient.fragments.NearyouFragment;
+import com.example.vlada.geomusicandroidclient.fragments.PlaylistsFragment;
+import com.example.vlada.geomusicandroidclient.fragments.SubscribedFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-import static java.lang.annotation.ElementType.METHOD;
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -61,7 +59,12 @@ public class MainActivity extends FragmentActivity
     public static Record currentRecord;
     private FrameLayout container;
     private int lastRecordId;
+    private ImageView userImage;
+    private TextView userName;
+    private FloatingActionButton fab;
+    private Button manageButton;
 
+    //final ActionBar actionBar = getActionBar();
     final static String BROADCAST_ACTION = "BROADCAST_ACTION";
     public static final String BROADCAST_SEEK_CHANGED = "SEEK_CHANGED";
     static boolean keepplaying = false;
@@ -72,14 +75,12 @@ public class MainActivity extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        LayoutInflater inflater = LayoutInflater.from(this);
-        List<View> pages = new ArrayList<View>();
 
 
         recordArtistSelected = (TextView) findViewById(R.id.record_author_selected);
         recordTitleSelected = (TextView) findViewById(R.id.record_title_selected);
         recordImage = (ImageView) findViewById(R.id.imageView4);
-        recordImage.setImageResource(R.drawable.record_background);
+        recordImage.setImageResource(R.drawable.retro);
         playPause = (ImageView) findViewById(R.id.main_playPause);
         playPause.setImageResource(R.drawable.ic_play_circle_outline_white_48dp);
         playPause.setOnClickListener(this::playPause);
@@ -89,24 +90,13 @@ public class MainActivity extends FragmentActivity
             startActivity(intent);
         });
         recordStrip = (LinearLayout) findViewById(R.id.main_record_strip);
-
-
-//        View page = inflater.inflate(R.layout.playlists_featured, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_trending, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_categories, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
+        fab = (FloatingActionButton) findViewById(R.id.fab);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Playlists");
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -115,18 +105,50 @@ public class MainActivity extends FragmentActivity
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setCheckedItem(R.id.nav_playlists);
-        navigationView.setBackgroundColor(Color.argb(255, 50, 200, 255));
+        navigationView.setBackgroundColor(Color.WHITE);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (!Application.getSharedInstance().getStorage().isLoggedIn()) {
-            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(intent);
-        }
+
         container = (FrameLayout) findViewById(R.id.container);
+        openPlayList();
+
+        View headerView = navigationView.getHeaderView(0);
+        userImage = (ImageView) headerView.findViewById(R.id.navbar_userImage);
+        Glide.with(this)
+                .load(Application.getSharedInstance().getStorage().getUserImage())
+                .asBitmap()
+                .placeholder(R.drawable.ic_account_circle_black_48dp)
+                .centerCrop()
+                .into(new BitmapImageViewTarget(userImage) {
+                    @Override
+                    protected void setResource(Bitmap resource) {
+                        RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                        roundedBitmapDrawable.setCircular(true);
+                        userImage.setImageDrawable(roundedBitmapDrawable);
+                    }
+                });
+
+
+        userImage.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, AccountManager.class);
+            startActivity(intent);
+        });
+        userName = (TextView) headerView.findViewById(R.id.navbar_userName);
+        userName.setText(Application.getSharedInstance().getStorage().getUserNickname());
+
+        manageButton = (Button) headerView.findViewById(R.id.navbar_manageButton);
+        manageButton.setOnClickListener(c -> {
+            Intent intent = new Intent(MainActivity.this, PlaylistManager.class);
+            startActivity(intent);
+        });
+
+        openPlayList();
+
     }
 
+
     public void setupPlayerStrip(Record record) {
-        if(record == null) {
+        if (record == null) {
             recordStrip.setVisibility(GONE);
             return;
         }
@@ -138,17 +160,8 @@ public class MainActivity extends FragmentActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.options_menu, menu);
-
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-
+        inflater.inflate(R.menu.nearyou_menu, menu);
         return true;
     }
 
@@ -188,17 +201,11 @@ public class MainActivity extends FragmentActivity
             case R.id.nav_subscribed:
                 openSubscribed();
                 break;
-            case R.id.nav_settings:
-                openSettings();
-                break;
             case R.id.nav_nearyou:
                 openNearYou();
                 break;
-            case R.id.nav_search:
-                openSearch();
-                break;
-            case R.id.nav_logout:
-                logout();
+            case R.id.nav_settings:
+                openSettings();
                 break;
         }
 
@@ -209,43 +216,21 @@ public class MainActivity extends FragmentActivity
 
     private void logout() {
         Application.getSharedInstance().getStorage().logout();
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, SplashActivity.class);
         startActivity(intent);
     }
 
-    private void openSearch() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//
-//        View page = inflater.inflate(R.layout.record_search, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
+   /* private void openSearch() {
         navigationView.setCheckedItem(R.id.nav_search);
+        getSupportActionBar().setTitle("Search");
         replaceFragment(new SearchFragment());
 
-    }
+    }*/
 
     private void openNearYou() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.nearyou_map, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.nearyou_categories, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_nearyou);
+        getSupportActionBar().setTitle("Near you");
+        replaceFragment(new NearyouFragment());
     }
 
     private void openSettings() {
@@ -254,56 +239,26 @@ public class MainActivity extends FragmentActivity
     }
 
     private void openSubscribed() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.subscribed_playlists, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_subscribed);
+        getSupportActionBar().setTitle("Subscibed");
+        fab.setVisibility(GONE);
+        replaceFragment(new SubscribedFragment());
     }
 
     private void openFavourites() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.favorites_records, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_favorites);
+        getSupportActionBar().setTitle("Favorites");
+        fab.setVisibility(GONE);
+        replaceFragment(new FavouritesFragment());
     }
 
     private void openPlayList() {
-//        LayoutInflater inflater = LayoutInflater.from(this);
-//        List<View> pages = new ArrayList<View>();
-//
-//        View page = inflater.inflate(R.layout.playlists_featured, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_trending, null);
-//        pages.add(page);
-//
-//        page = inflater.inflate(R.layout.playlists_categories, null);
-//        pages.add(page);
-//
-//        MainPagerAdapter pagerAdapter = new MainPagerAdapter(pages);
-//        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-//        viewPager.setAdapter(pagerAdapter);
-//        viewPager.setCurrentItem(0);
-
         navigationView.setCheckedItem(R.id.nav_playlists);
-    }
+        getSupportActionBar().setTitle("Playlists");
+        fab.setVisibility(GONE);
 
+        replaceFragment(new PlaylistsFragment());
+    }
 
 
     public void playPause(View view) {
@@ -335,25 +290,13 @@ public class MainActivity extends FragmentActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
-            @Override
-            public void onResult(VKAccessToken res) {
-                // User passed Authorization
-            }
-
-            @Override
-            public void onError(VKError error) {
-                // User didn't pass Authorization
-            }
-        })) {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         EventBus.getDefault().register(this);
+
     }
 
     @Override
